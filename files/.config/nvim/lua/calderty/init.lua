@@ -1,0 +1,6 @@
+require("calderty.sets")
+require("lazy").setup("calderty.lazy")
+require("calderty.remaps")
+require("calderty.statusline")
+require("calderty.tabline")
+require("calderty.lsp")

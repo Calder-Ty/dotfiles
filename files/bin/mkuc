@@ -1,0 +1,53 @@
+# Copyright 2021, Tyler Calder
+#!/bin/bash
+
+set -e
+
+if [ -z $1 ] || [ $1 == "-h" ] || [ $1 == "--help" ];
+then
+    echo "Create a new usecase file from template"
+    echo "usage: $0 FILENAME"
+    echo ""
+    echo "FILENAME      name to use for new usecase file"
+    exit 1
+fi
+
+
+
+UCPATH=$1
+UCNAME=$(echo $UCPATH | rev | cut -d'/' -f 1 | rev)
+
+cat << EOF > $UCPATH
+# USECASE $UCNAME
+
+## A. CHARACTERISTIC INFORMATION
+
+- *Goal in Context:*
+- *Scope:*
+- *Level:*
+- *Preconditions:*
+- *Success end condition:*
+- *Failed end condition:*
+- *Primary actor:*
+- *Trigger:*
+
+## B. MAIN SUCCESS SCENARIO
+
+## C. EXTENSIONS
+
+## D. VARIATIONS
+
+## E. RELATED INFORMATION
+
+- *Priority:*
+- *Performance target:*
+- *Frequency:*
+- *Superordinate use case:*
+- *Subordinate use case:*
+- *Channel to primary actor:*
+- *Channel to secondary actor:*
+
+## F. SCHEDULE
+
+## G. OPEN ISSUES
+EOF

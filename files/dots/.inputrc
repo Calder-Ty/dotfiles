@@ -1,0 +1,14 @@
+set bell-style none
+set editing-mode vi
+# vi editing mode rules
+$if mode=vi
+# Add usefull keycodes i'm used to from emacs
+"\C-l": clear-screen
+
+# Add my jk to close
+"jk": vi-movement-mode
+
+set show-mode-in-prompt on
+set vi-cmd-mode-string "\1\e[2 q\2"
+set vi-ins-mode-string "\1\e[6 q\2"
+$endif

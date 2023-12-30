@@ -1,0 +1,219 @@
+// Settings i want to share
+{
+    "todohighlight.keywords": [
+    {
+      "text": "TODO:",
+      "color": "white",
+      "backgroundColor": "#aa4415",
+      "overviewRulerColor": "yellow"
+    },
+    {
+      "text": "SNARK:",
+      "color": "#e82A2A",
+      "backgroundColor": "#000000",
+      "overviewRulerColor": "green"
+    },
+    {
+      "text": "???:",
+      "color": "#ffffff",
+      "backgroundColor": "#aa00ff"
+    }
+  ],
+   "workbench.colorCustomizations": {
+    "[Quiet Light]": {
+      "editor.background": "#ffffff"
+    },
+    "[Monocle]": {
+      "terminal.foreground": "#9bac9d",
+      "editor.lineHighlightBackground": "#2c3349",
+      "statusBar.background": "#4b2c69d7",
+      "editorRuler.foreground": "#4b2c69d7"
+    }
+  },
+  "editor.tokenColorCustomizations": {
+    "[Solarized Light]": {
+      "textMateRules": [
+        {
+          "name": "Types",
+          "scope": [
+            "storage.type.rust",
+            "storage.modifier"
+          ],
+          "settings": {
+            "foreground": "#D46A6A",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "name": "Namespace Name",
+          "scope": [
+            "entity.name.namespace"
+          ],
+          "settings": {
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "name": "Control Keyword",
+          "scope": [
+            "keyword.control"
+          ],
+          "settings": {
+            "foreground": "#205555",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "name": "Other Keyword",
+          "scope": [
+            "keyword.other"
+          ],
+          "settings": {
+            "foreground": "#458B45",
+          }
+        },
+        {
+          "name": "Attribute",
+          "scope": "meta.attribute",
+          "settings": {
+            "foreground": "#145814",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "name": "Function",
+          "scope": "entity.name.function",
+          "settings": {
+            "foreground": "#D46A6A",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "name": "Operator",
+          "scope": "keyword.operator",
+          "settings": {
+            "foreground": "#8D5D36",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "name": "String",
+          "scope": "string.quoted.double",
+          "settings": {
+            "foreground": "#6E401A",
+            "fontStyle": "italic"
+          }
+        }
+      ]
+    },
+    "[Quiet Light]": {
+      "textMateRules": [
+        {
+          "name": "Docstrings",
+          "scope": "string.quoted.docstring.multi.python",
+          "settings": {
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "name": "String",
+          "scope": [
+            "string.quoted.double",
+            "string.quoted.single"
+          ],
+          "settings": {
+            "foreground": "#9c5d27"
+          }
+        },
+        {
+          "name": "python: self",
+          "scope": [
+            "variable.parameter.function.language.special.self.python",
+            "variable.language.special.self.python"
+          ],
+          "settings": {
+            "foreground": "#B074db"
+          }
+        },
+        {
+          "name": "function calls",
+          "scope": "meta.function-call.generic",
+          "settings": {
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "name": "Inherited Class",
+          "scope": "entity.other.inherited-class",
+          "settings": {
+            "foreground": "#817fde",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "name": "Class function",
+          "scope": "storage.type",
+          "settings": {
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "name": "Python Magic Methods",
+          "scope": "support.function.magic.python",
+          "settings": {
+            "fontStyle": "italic bold"
+          }
+        }
+      ]
+    },
+    "[Monocle]": {
+      "textMateRules": [
+        {
+          "name": "function calls",
+          "scope": "meta.function-call.generic",
+          "settings": {
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "scope": "source.shell",
+          "settings": {
+            "foreground": "#9494b8"
+          }
+        },
+        {
+          "scope": "string.quoted.docstring.multi.python",
+          "settings": {
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "name": "Python Magic Methods",
+          "scope": "support.function.magic.python",
+          "settings": {
+            "fontStyle": "italic bold"
+          }
+        },
+        {
+          "name": "Git Subject Line",
+          "scope": "meta.scope.subject.git-commit",
+          "settings": {
+            "foreground": "#9c5d27",
+          }
+        },
+        {
+          "name": "Rust Attribute",
+          "scope": "meta.attribute.rust",
+          "settings": {
+            "foreground": "#038680",
+            "fontStyle": "italic bold"
+          }
+        },
+      ]
+    }
+  },
+  // Zen mode
+  "zenMode.hideLineNumbers": false,
+  "workbench.statusBar.visible": true,
+  "zenMode.hideStatusBar": false, 
+}

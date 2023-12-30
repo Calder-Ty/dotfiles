@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+"""Simple Script for Generating Pomodoro Times"""
+import argparse
+import dataclasses
+import datetime as dt
+import os
+import pathlib
+import sys
+import typing
+
+POMO_PATH = pathlib.Path(os.getenv("HOME", "/var/run/pomo")) / ".pomofile"
+WORKING = 0
+RESTING = 1
+
+
+class PomoStatus(typing.NamedTuple):
+    work_sec: int
+    rest_sec: int
+    sec_left: int
+    status: int
+
+
+@dataclasses.dataclass
+class PomoRecord:
+    work_sec: int
+    rest_sec: int
+    start_time: int
+
+    def calc_status(self) -> PomoStatus:
+        sec_left, status = self.seconds_left()
+        return PomoStatus(
+            self.work_sec,
+            self.rest_sec,
+            sec_left,
+            status
+
+        )
+
+    def seconds_left(self) -> typing.Tuple[int, int]:
+        time_since_start = int(dt.datetime.utcnow().timestamp()) - self.start_time
+        cycle_secs = self.work_sec + self.rest_sec
+        if time_since_start < cycle_secs:
+            if time_since_start < self.work_sec:
+                return self.work_sec - time_since_start, WORKING
+            return cycle_secs - time_since_start, RESTING
+        else:
+            remainder = time_since_start % cycle_secs
+            if remainder < self.work_sec:
+                return self.work_sec - remainder, WORKING
+            else:
+                return cycle_secs - remainder, RESTING
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("cmd", choices = ["start", "status", "stop"])
+    args = parser.parse_args()
+    globals()[args.cmd]()
+
+
+def start():
+    if not POMO_PATH.exists():
+        # Start A new Time
+        pomo_record = PomoRecord(
+            25 * 60,
+            5 * 60,
+            int(dt.datetime.utcnow().timestamp()),
+        )
+        with POMO_PATH.open("w") as fp:
+            fp.writelines(
+                [
+                    str(x) + "\n"
+                    for x in [
+                        pomo_record.work_sec,
+                        pomo_record.rest_sec,
+                        pomo_record.start_time,
+                    ]
+                ]
+            )
+    else:
+        with POMO_PATH.open("r") as fp:
+            lines = [int(x) for x in fp.readlines()]
+        if not lines:
+            pomo_record = PomoRecord(
+                25 * 60, 5 * 60, int(dt.datetime.utcnow().timestamp())
+            )
+        else:
+            sys.stderr.write("Session Exists")
+            exit(1)
+        with POMO_PATH.open("w") as fp:
+            fp.writelines(
+                [
+                    str(x) + "\n"
+                    for x in [
+                        pomo_record.work_sec,
+                        pomo_record.rest_sec,
+                        pomo_record.start_time,
+                    ]
+                ]
+            )
+
+def status():
+    if not POMO_PATH.exists():
+        sys.stderr.write("No Session Active")
+        exit(1)
+    with POMO_PATH.open() as fp:
+        lines = fp.readlines()
+    if not lines:
+        sys.stderr.write("No Session Active")
+        exit(1)
+
+    record = PomoRecord(*[int(x) for x in lines])
+    s = record.calc_status()
+    print(f'{s.status} {s.sec_left} {s.work_sec} {s.rest_sec}')
+
+def stop():
+    with POMO_PATH.open('w') as fp:
+        fp.writelines('')
+
+
+if __name__ == "__main__":
+    main()

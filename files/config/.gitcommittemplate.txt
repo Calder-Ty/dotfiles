@@ -1,0 +1,49 @@
+#<type>[(scope)]: description ------------------>
+
+# [body]
+
+# [footer]
+
+#---------------------------------------------------------------------#
+# The Rules of good Commit Messages:
+# 1. Subject is in Imperative Mood
+# 2. Description in subject should start with capital letter
+# 3. A subject Line no longer than 50 characters
+# 4. The optional body explains why the commit was needed, and why you
+#    Chose the given solution. Don't delve into code, other than to
+#    explain why changes were needed. Let the code speak to that end.
+# 5. Footers can be used to link to Issues, or add other information
+#    Such as outlined in git trailer syntax
+
+# Conventional Commit Rules
+# -------------------------
+# Use Conventional Commit Rules so that the commit messages are
+# are standardized. This allows us to use tools that can read our
+# messages and do nice things with them. It also makes it so we write
+# more informative commits.
+
+# The Rules are thus:
+# Subject:
+# 1. You MUST have a subject line.
+# 2. Your subject line must begin with a one of the following flags:
+#    Mandated by Spec
+#    - feat (For new Features)
+#    - fix (For bug fixes)
+#    Additional to our request
+#    - style (for style changes and cleaning)
+#    - refactor (For refactoring)
+#    - test (for test related commits)
+#    - docs (for documentation commits)
+#    - chore (regular maintenance. Version bumping, etc)
+#    - ci (stuff to deal with CI, or building)
+# 3. You can optionally add a scope in parenthesis following the flag
+# 4. The flag MUST be terminated with a `: ` followed by a description
+# Body:
+# 1. The optional Body MUST be separated from the subject by one line
+# 2. The body can be multiple paragraphs and free form.
+# Footer:
+# 1. The optional footer MUSt be separated from the body by one line
+# 2. The footer must be in the following formats:
+#    [key]: [value]
+#    [key] #[value]
+#    BREAKING CHANGE: [value]

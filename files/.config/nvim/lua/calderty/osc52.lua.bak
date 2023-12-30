@@ -1,0 +1,129 @@
+-- Translated from https://github.com/fcpg/vim-osc52
+
+local api = vim.api
+
+local b64_table = {
+	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
+	"Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f",
+	"g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
+	"w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "/"
+}
+
+M = {}
+
+local function send_via_osc52(str)
+
+	local len = string.len(str)
+	local ok, limit = pcall(api.nvim_get_var, "osc52_max_length")
+	if not ok then
+		limit = 1048576
+	end
+
+	if len > limit then
+		print("String of length " .. len .. " is too long. (limit = " .. limit .. ")")
+	end
+
+	local osc52
+	if os.getenv("TMUX") then
+		osc52 = Get_OSC52_tmux(str)
+	elseif os.getenv("TERM") and string.match(os.getenv("TERM") and os.getenv("TERM") or "", "screen") then
+		osc52 = Get_OSC52_DCS(str)
+	else
+		osc52 = Get_OSC52(str)
+	end
+
+	Rawecho(osc52)
+	print("Copied " .. len .. " bytes")
+end
+
+function Get_OSC52_tmux(str)
+	local b64 = B64encode(str, 0)
+	local rv = "\\033]52;c;" .. b64 .. "\\033\\\\"
+	return rv
+end
+
+function Get_OSC52_DCS(str)
+	local b64 = B64encode(str, 76)
+
+	-- Remove the trailing newline.
+	b64 = string.gsub(b64, '\n*$', '', 1)
+	--Replace each newline with an <end-dcs><start-dcs> pair.
+
+	b64 = string.gsub(b64, '\n', "\\e/\\eP")
+	-- (except end-of-dcs is "ESC \", begin is "ESC P", and I can't figure out
+	--  how to express "ESC \ ESC P" in a single string.  So, the first substitute
+	--  uses "ESC / ESC P", and the second one swaps out the "/".  It seems like
+	--  there should be a better way.)
+	b64 = string.gsub(b64, "/", "\\")
+
+	-- Now wrap the whole thing in <start-dcs><start-osc52>...<end-osc52><end-dcs>.
+	b64 = "\\eP\\e]52;c;" .. b64 .. "\\x07\\e\\x5c"
+
+	return b64
+end
+
+function Get_OSC52(str)
+	local b64 = B64encode(str, 0)
+	local rv = "\\e]52;c;" .. b64 .. "\\x07"
+	return rv
+end
+
+-- Echo a string to the terminal without munging the escape sequences.
+function Rawecho(str)
+	-- Otherwise, fall back on a shell command to write the escape sequence. This
+	-- requires a redraw and causes the screen to flash as a side effect.
+	-- if vim.fn.filewritable('/dev/fd/2') == 1 then
+	-- 	vim.fn.writefile({str}, '/dev/fd/2', 'b')
+	-- 	\ePtmux;\e\e]52;c;1ostltt2xozklorkn6yzx8rfmujk1uljuxmrfmhmoJn=\x07\e\\print(str)
+	-- else
+	local escaped = vim.fn.shellescape(str)
+	vim.cmd("silent! ! printf '" .. escaped .."'")
+-- 	vim.fn.chansend(vim.v.stderr, str)
+	-- end
+
+end
+
+function B64encode(str, size)
+	local bytes = { string.byte(str, 1, string.len(str)) }
+	local b64 = {}
+	for i, byte in ipairs(bytes) do
+		local n = (byte * 0x10000 +
+			(bytes[i + 1] and bytes[i + 1] or 0) * 0x100 +
+			(bytes[i + 2] and bytes[i + 2] or 0))
+		table.insert(b64, b64_table[n / 0x40000])
+		table.insert(b64, b64_table[n / 0x1000 % 0x40])
+		table.insert(b64, b64_table[n / 0x40 % 0x40])
+		table.insert(b64, b64_table[n % 0x40])
+	end
+
+	local count = #b64
+	if #bytes % 3 == 1 then
+		b64[count] = "="
+		b64[count - 1] = "="
+	end
+
+	if #bytes % 3 == 2 then
+		b64[count] = "="
+	end
+
+	if size <= 0 then
+		return table.concat(b64)
+	end
+
+	local chunked = ''
+	for i, byte in ipairs(b64) do
+		chunked = chunked .. byte
+		if i % size == 0 then
+			chunked = chunked .. "\n"
+		end
+	end
+	return chunked
+end
+
+M.SendViaOSC52 = function()
+	-- Get Register value
+	local val = api.nvim_call_function("getreg", { '"' })
+	send_via_osc52(val)
+end
+
+return M
