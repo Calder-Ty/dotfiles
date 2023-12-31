@@ -7,7 +7,7 @@ dap.adapters.codelldb = {
 	type = 'server',
 	port = "13299",
 	executable = {
-		command = '/home/tyler/.local/share/nvim/mason/bin/codelldb',
+		command = '/home/tyler/.local/bin/codelldb/adapter/codelldb',
 		args = { "--port", "13299" },
 	}
 }
