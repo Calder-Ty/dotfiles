@@ -33,7 +33,6 @@ return {
 
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
 	{ "simrat39/rust-tools.nvim" },
-	{ "nvim-tree/nvim-tree.lua" },
 	{ "lewis6991/gitsigns.nvim" },
 	{ "Calder-Ty/telescope-doit.nvim" },
 	{ "Calder-Ty/comment_toggle.nvim" },
@@ -44,4 +43,7 @@ return {
 	-- database stuff
 	{ "tpope/vim-dadbod" },
 	{ "kristijanhusak/vim-dadbod-ui" },
+
+	-- Get Better
+	-- {"m4xshen/hardtime.nvim"},
 }
