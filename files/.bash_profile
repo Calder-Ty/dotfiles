@@ -109,6 +109,7 @@ export EDITOR=vim
 export PATH="~/.local/bin:$PATH"
 # Get rid of undesired folders for fzf
 export FZF_DEFAULT_COMMAND='ag -l --ignore ".git" --hidden -g ""'
+export FZF_CTRL_T_COMMAND='rg --files --hidden'
 
 
 pyenv () {
