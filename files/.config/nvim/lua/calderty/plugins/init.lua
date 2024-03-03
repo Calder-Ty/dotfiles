@@ -3,28 +3,20 @@ return {
 		"nvim-telescope/telescope.nvim",
 		dependencies = { { "nvim-lua/plenary.nvim" } }
 	},
-	{'nvim-telescope/telescope-ui-select.nvim',
+	{
+		'nvim-telescope/telescope-ui-select.nvim',
 		dependencies = { { "nvim-telescope/telescope.nvim" } }
 	},
 	{"theprimeagen/harpoon"},
-	{
 	{
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
 		build = ":TSUpdate"
 	},
-
-	},
 	{ "mbbill/undotree" },
-	{ "tpope/vim-fugitive" },
-	{ "neovim/nvim-lspconfig" },
 	{ "hrsh7th/vim-vsnip" },
 
-	{"onsails/lspkind.nvim"},
-
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
-	{ "simrat39/rust-tools.nvim" },
-	{ "lewis6991/gitsigns.nvim" },
 	{ "Calder-Ty/telescope-doit.nvim" },
 	{ "Calder-Ty/comment_toggle.nvim" },
 	{ "Calder-Ty/Monocle.nvim" },
