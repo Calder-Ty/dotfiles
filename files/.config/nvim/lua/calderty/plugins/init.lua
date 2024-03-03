@@ -8,11 +8,6 @@ return {
 		dependencies = { { "nvim-telescope/telescope.nvim" } }
 	},
 	{"theprimeagen/harpoon"},
-	{
-		"nvim-treesitter/nvim-treesitter",
-		version = false,
-		build = ":TSUpdate"
-	},
 	{ "mbbill/undotree" },
 	{ "hrsh7th/vim-vsnip" },
 
