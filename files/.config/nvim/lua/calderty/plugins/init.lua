@@ -1,18 +1,9 @@
 return {
-	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = { { "nvim-lua/plenary.nvim" } }
-	},
-	{
-		'nvim-telescope/telescope-ui-select.nvim',
-		dependencies = { { "nvim-telescope/telescope.nvim" } }
-	},
-	{"theprimeagen/harpoon"},
+	{ "theprimeagen/harpoon" },
 	{ "mbbill/undotree" },
 	{ "hrsh7th/vim-vsnip" },
 
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
-	{ "Calder-Ty/telescope-doit.nvim" },
 	{ "Calder-Ty/comment_toggle.nvim" },
 	{ "Calder-Ty/Monocle.nvim" },
 	{ "tpope/vim-surround" },
