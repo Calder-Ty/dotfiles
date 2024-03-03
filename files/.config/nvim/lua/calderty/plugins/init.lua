@@ -18,12 +18,6 @@ return {
 	{ "mbbill/undotree" },
 	{ "tpope/vim-fugitive" },
 	{ "neovim/nvim-lspconfig" },
-	{ "hrsh7th/nvim-cmp", commit = "1cad30fcffa282c0a9199c524c821eadc24bf939"},
-	{ "hrsh7th/cmp-buffer" },
-	{ "hrsh7th/cmp-path" },
-	{ "saadparwaiz1/cmp_luasnip" },
-	{ "hrsh7th/cmp-nvim-lsp" },
-	{ "hrsh7th/cmp-nvim-lua" },
 	{ "hrsh7th/vim-vsnip" },
 
 	{"onsails/lspkind.nvim"},
