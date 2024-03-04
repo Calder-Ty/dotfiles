@@ -59,15 +59,5 @@ return {
 			require("telescope").load_extension("ui-select")
 		end,
 	},
-	{ 
-		"Calder-Ty/telescope-doit.nvim",
-		dependencies = { { "nvim-telescope/telescope.nvim" } },
-		config = function()
-			local todo_searches = {["TODO:"] = { symbol = '✓'}, ["FIXME:"] = {symbol = "⚠"}, ["BUG:"] = {symbol = "X"} }
-			vim.keymap.set("n", "<leader><leader>t", 
-				function () require("telescope-doit").doit(require("telescope.themes").get_dropdown{searches = todo_searches}) end, {}
-			)
-		end,
-	},
 }
 

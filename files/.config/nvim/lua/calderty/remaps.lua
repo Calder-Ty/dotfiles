@@ -1,4 +1,3 @@
-local comment_toggle = require("comment_toggle")
 local osc52 = require("calderty.osc52")
 local api = vim.api
 
@@ -18,9 +17,6 @@ vim.keymap.set("n","Y", "y$")
 vim.keymap.set("n","Y", "y$")
 
 vim.keymap.set("n","gx", '<Cmd>call jobstart(["brave-browser", expand("<cfile>")])<CR>', {silent=true})
-
-vim.keymap.set("n", "<leader>/", ":CommentToggle<CR>")
-vim.keymap.set("v", "<leader>/", ":CommentToggle<CR>")
 
 vim.keymap.set("x", "Y", osc52.copy_visual)
 
