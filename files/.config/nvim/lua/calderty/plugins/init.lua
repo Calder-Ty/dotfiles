@@ -1,5 +1,4 @@
 return {
-	{ "mbbill/undotree" },
 	{ "hrsh7th/vim-vsnip" },
 
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
