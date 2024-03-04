@@ -18,7 +18,7 @@ return {
 				-- FIXME: Why is there no fixme symbol
 					FIX = {
 						color = "#FA5172",
-					alt = {"FIXIT", "FIXME", "BUG", "ISSUE", "XXX"},
+					alt = {"FIXIT", "FIXME", "BUG", "ISSUE",},
 				},
 
 				-- HACK: Watchout this is a hack
@@ -29,7 +29,14 @@ return {
 				-- WARN: This is the warning
 				WARN = {
 					color = "warning",
-					alt = {"WARNING"},
+					alt = {"WARNING", "XXX"},
+				},
+
+				-- SAFETY: This is a note about how we are safe
+				SAFETY = {
+					color = "#1db4d0",
+					icon = "󰴰",
+					alt = {"SAFTEY"}
 				},
 
 				-- PERF: noes on performance
