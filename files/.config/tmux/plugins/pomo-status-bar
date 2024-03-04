@@ -20,5 +20,5 @@ fi
 
 count=$(echo $status | awk '{if ($1 == 0) {print "(1-"$2"/"$3") * 8;scale=0;last/1"} else {print "(1-"$2"/"$4") * 8;scale=0;last/1"}}' | bc -l | tail -1)
 
-python3 -c "print((b'\xf3\xb0\xaa'+ bytes([0xa5-int($count)])).decode())"
+python3 -c "print((b'\xf3\xb0\xaa'+ bytes([0xa5-int($count)])).decode(), end='')"
 

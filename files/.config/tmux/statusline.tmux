@@ -1,4 +1,4 @@
-set status-position top
+set -g status-position top
 # Left
 set -g status-left
 set -g status-left-length 30
@@ -20,10 +20,10 @@ set -g @statusline_pomodoro "#{?#(pomo status | cut -f1 -d' '),#[fg=#8f40ff],#[f
 # First empty the status line
 set -g status-right-length 100
 set -g status-right ''
-set -aFg status-right '#[fg=#5e5e5e]#{@statusline_pomodoro}'
-set -aFg status-right ' #[fg=#5e5e5e]#{@statusline_volume}'
-# set -ag status-right ' #[fg=#243955]#[bg=#243955]'
-set -aFg status-right ' #[fg=#106474]#{=17/...:@statusline_title}'
-set -aFg status-right ' #[fg=#8f40ff]#{=17/...:@statusline_artist}'
-# set -ag status-right '#[fg=#243955]#[bg=default]'
+# set -aFg status-right '#[fg=#5e5e5e]#{@statusline_pomodoro}'
+# set -aFg status-right ' #[fg=#5e5e5e]#{@statusline_volume}'
+# set -ag status-right ' #[fg=#8f40ff]#[bg=#8f40ff]'
+set -aFg status-right ' #[fg=#a6e22e]#{=17/...:@statusline_title}'
+set -aFg status-right ' #[fg=#66d9ef]#{=17/...:@statusline_artist}'
+# set -ag status-right '#[fg=#8f40ff]#[bg=default]'
 set -ag status-right ' #[fg=colour33]%H:%M:%S #[fg=colour28]%Y-%m-%d'
