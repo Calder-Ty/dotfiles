@@ -1,6 +1,7 @@
 return {
 	{
 		"folke/todo-comments.nvim",
+		lazy=false,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
@@ -15,9 +16,9 @@ return {
 			keywords = {
 
 				-- FIXME: Why is there no fixme symbol
-				FIXME = {
-					color = "error",
-					alt = {"FIXIT", "FIX", "BUG", "ISSUE", "XXX"},
+					FIX = {
+						color = "#FA5172",
+					alt = {"FIXIT", "FIXME", "BUG", "ISSUE", "XXX"},
 				},
 
 				-- HACK: Watchout this is a hack
@@ -33,7 +34,7 @@ return {
 
 				-- PERF: noes on performance
 				PERF = {
-					color = "#243955",
+					color = "#77879c",
 					alt = {"OPTIM", "PERFORMANCE", "OPTIMIZE"},
 				},
 
@@ -45,7 +46,7 @@ return {
 
 				-- TODO: text that is highlighted as a todo note
 				TODO = {
-					color = "todo",
+					color = "#71f000",
 					alt = {"TEST"},
 				},
 
