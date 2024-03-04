@@ -1,5 +1,4 @@
 return {
-	{ "theprimeagen/harpoon" },
 	{ "mbbill/undotree" },
 	{ "hrsh7th/vim-vsnip" },
 
