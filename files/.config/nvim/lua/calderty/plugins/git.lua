@@ -2,7 +2,7 @@ return {
 	{ 
 		"tpope/vim-fugitive",
 		-- Not Lazy for now because my statusline uses it
-		lazy = false,
+		event = "VeryLazy",
 		keys = {
 			{"<leader>gd", ":vert Gdiffsplit<cr>", desc="View diff of current file"},
 			{"<leader>gs", ":G<CR>", desc="View git status"},

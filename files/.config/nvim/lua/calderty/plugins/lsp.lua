@@ -89,6 +89,7 @@ return {
 	},
 	{ 
 		"simrat39/rust-tools.nvim",
+		event = "BufEnter *.rs",
 		config = function(plugin, opts)
 			require('rust-tools').setup(RUST_OPTS)
 		end
