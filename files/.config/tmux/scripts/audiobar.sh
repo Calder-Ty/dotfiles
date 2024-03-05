@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ -z $PLAYERCTL_CMD ]]; then
-	PLAYERCTL_CMD='/home/tyler/.local/bin/playerctl'
+	PLAYERCTL_CMD='playerctl'
 fi
 
 volume() {

@@ -2,8 +2,10 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
+		lazy = false,
 		build = ":TSUpdate",
-		opts = {
+		config = function()
+			require("nvim-treesitter.configs").setup({
 			ensure_installed = {"python", "rust", "lua", "bash", "json", "yaml", "markdown"},
 			auto_install = true,
 			sync_install = false,
@@ -31,6 +33,7 @@ return {
 				  show_help = '?',
 				},
 			},
-		},
+		})
+		end
 	}
 }
