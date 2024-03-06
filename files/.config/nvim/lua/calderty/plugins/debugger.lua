@@ -117,6 +117,8 @@ return {
 					return cwd .. '/venv/bin/python'
 				  elseif vim.fn.executable(cwd .. '/.venv/bin/python') == 1 then
 					return cwd .. '/.venv/bin/python'
+				  elseif vim.fn.executable(os.getenv("VIRTUAL_ENV") .. "/bin/python") == 1 then
+					return os.getenv("VIRTUAL_ENV") .. "/bin/python"
 				  else
 					return '/usr/bin/python3'
 				  end
