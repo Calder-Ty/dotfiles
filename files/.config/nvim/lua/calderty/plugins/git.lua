@@ -1,5 +1,5 @@
 return {
-	{ 
+	{
 		"tpope/vim-fugitive",
 		-- Not Lazy for now because my statusline uses it
 		event = "VeryLazy",
@@ -10,6 +10,14 @@ return {
 			{"<leader>gl", ":Git log<CR>", desc="View git log"},
 		},
 	},
-	{ "lewis6991/gitsigns.nvim" },
+	{
+		"lewis6991/gitsigns.nvim",
+		opts = {
+			current_line_blame=true,
+			current_line_blame_opts = {
+				ignore_whitespace=true,
+			},
+		},
+	},
 }
 
