@@ -9,7 +9,12 @@ return {
 			{"<leader>/", ":CommentToggle<CR>", mode='v', desc="Toggle Comment"},
 		},
 	},
-	{ "Calder-Ty/Monocle.nvim" },
+	{
+		"Calder-Ty/Monocle.nvim",
+		init = function()
+			vim.cmd.colorscheme 'monocle'
+		end
+	},
 	{ "tpope/vim-surround" },
 
 	-- database stuff
