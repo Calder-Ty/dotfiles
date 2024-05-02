@@ -18,4 +18,5 @@ return {
 
 	-- Get Better
 	-- {"m4xshen/hardtime.nvim"},
+	{"nvim-treesitter/nvim-treesitter-context"},
 }
