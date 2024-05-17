@@ -12,7 +12,7 @@ return {
 		c = {bg = colors.none, fg = colors.green}
 	},
 	visual = {
-		a = {bg = colors.black, fg = colors.yellow, gui = 'bold'},
+		a = {bg = colors.shaddow, fg = colors.yellow, gui = 'bold'},
 		b = {bg = colors.black, fg = colors.lightyellow},
 		c = {bg = colors.none, fg = colors.green}
 	},
@@ -22,7 +22,7 @@ return {
 		c = {bg = colors.none, fg = colors.green}
 	},
 	command = {
-		a = {bg = colors.black, fg = colors.darkgreen, gui = 'bold'},
+		a = {bg = colors.shaddow, fg = colors.darkgreen, gui = 'bold'},
 		b = {bg = colors.black, fg = colors.seagreen},
 		c = {bg = colors.none, fg = colors.green}
 	},
