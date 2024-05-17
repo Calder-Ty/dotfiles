@@ -7,7 +7,7 @@ return {
 		c = {bg = colors.none, fg = colors.green}
 	},
 	insert = {
-		a = {bg = colors.shaddow, fg = colors.darkred, gui = 'bold'},
+		a = {bg = colors.shaddow, fg = colors.red, gui = 'bold'},
 		b = {bg = colors.black, fg = colors.lightmagenta},
 		c = {bg = colors.none, fg = colors.green}
 	},

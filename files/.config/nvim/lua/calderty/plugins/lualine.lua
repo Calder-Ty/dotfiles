@@ -44,7 +44,9 @@ return {
 
 		local lualine_c = {"%=", {custom_fname, symbols = {
 				modified = "●",
-			}},}
+			},
+			path=1,
+		},}
 		opts.sections.lualine_c = lualine_c
 		require'lualine'.setup(opts)
 	end
