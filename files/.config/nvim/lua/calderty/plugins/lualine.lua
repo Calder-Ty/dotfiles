@@ -42,7 +42,7 @@ return {
 		  return data
 		end
 
-		local lualine_c = {{custom_fname, symbols = {
+		local lualine_c = {"%=", {custom_fname, symbols = {
 				modified = "●",
 			}},}
 		opts.sections.lualine_c = lualine_c
