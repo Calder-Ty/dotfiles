@@ -12,3 +12,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 alias tmux="tmux -2"
 alias v="vim ."
+
+if [ -n $(which watchexec) ]; then
+	alias watch='watchexec -c --project-origin .'
+fi

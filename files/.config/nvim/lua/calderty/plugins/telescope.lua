@@ -6,24 +6,25 @@ return {
 
 			local builtin = require("telescope.builtin")
 
-			local vimgrep_arguments = {
-					vimgrep_arguments = {
-						'rg',
-						'--color=never',
-						'--no-heading',
-						'--with-filename',
-						'--line-number',
-						'--column',
-						'--smart-case',
-						-- ABOVE are REQUIRED BY TELESCOPE,
-						'--hidden'
-					}
+			local defaults = {
+				file_ignore_patterns = { ".git/" },
+				vimgrep_arguments = {
+					'rg',
+					'--color=never',
+					'--no-heading',
+					'--with-filename',
+					'--line-number',
+					'--column',
+					'--smart-case',
+					-- ABOVE are REQUIRED BY TELESCOPE,
+					'--hidden'
+				}
 			}
 
 
-			vim.keymap.set("n", "<C-p>", builtin.git_files, {})
+			vim.keymap.set("n", "<C-p>", builtin.find_files, {})
 			vim.keymap.set("n", "<leader><C-r>", builtin.registers, {})
-			vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
+			vim.keymap.set("n", "<leader>pf", builtin.git_files, {})
 			vim.keymap.set("n", "<leader>a", builtin.live_grep, {})
 			vim.keymap.set("n", "<leader>A", function() builtin.live_grep(
 				{
@@ -43,7 +44,7 @@ return {
 						no_ignore = true
 					}
 				},
-				defaults = vimgrep_arguments,
+				defaults = defaults,
 				extensions = {
 				["ui-select"] = {
 					require("telescope.themes").get_dropdown {},
