@@ -41,7 +41,7 @@ vim.opt.spelllang="en_us"
 
 -- " set listchars+=multispace:···+
 -- " set listchars+=eol:↵
-vim.opt.listchars = { trail = '·', tab = '» '}
+vim.opt.listchars = { trail = '·', tab = '» ', leadmultispace = '│   '}
 vim.opt.completeopt=menu,menuone,noselect,noinsert
 vim.opt.list = true
 vim.opt.updatetime=100
