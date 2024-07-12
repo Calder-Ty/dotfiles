@@ -70,6 +70,7 @@ return {
 				settings = {
 					zls = {
 						warn_style=true,
+						enable_inlay_hints=true,
 						inlay_hints_show_variable_type_hints=true,
 					}
 				},
@@ -79,6 +80,7 @@ return {
 			nvim_lsp.pylsp.setup(py_opts)
 			nvim_lsp.zls.setup(zig_opts)
 			nvim_lsp.gopls.setup(default_opts)
+			nvim_lsp.csharp_ls.setup(default_opts)
 
 			local signs = { Error = "", Warn = "", Hint = "󰌵", Info = ""}
 			for type, icon in pairs(signs) do
