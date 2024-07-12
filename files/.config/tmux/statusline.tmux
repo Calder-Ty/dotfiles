@@ -6,7 +6,7 @@ set -g status-left '#[fg=colour244][#S]'
 
 # Centre
 set -g status-fg white
-set -g status-bg terminal
+set -g status-style bg=terminal
 set -g status-justify left
 setw -g window-status-current-format ' #I:#W#F '
 setw -g window-status-style 'fg=colour244'
