@@ -22,7 +22,7 @@ return {
 			end
 
 
-			keymap.set("n", "<leader>fm", function() harpoon:list():append() end)
+			keymap.set("n", "<leader>fm", function() harpoon:list():add() end)
 			keymap.set("n", "<leader>fv", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 			keymap.set("n", "<leader>fj", go_to_harpoon_file(1))
 			keymap.set("n", "<leader>fk", go_to_harpoon_file(2))
