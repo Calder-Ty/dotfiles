@@ -79,19 +79,19 @@ local make_callout = function()
 
 	vim.api.nvim_buf_set_lines(floater, 0,-1, false, lines)
 
-	print("current_line: " .. current_line)
 	vim.api.nvim_open_win(floater, false,
 		{
-			relative = "win",
+			relative = "cursor",
 			anchor = "NE",
 			-- TODO: Make this dynamic
 			width = 50,
 			height = 20,
 
-			row = vim.api.call("winline") - 10, -- Center it around the current line
+			row =  -10, -- Center it around the current line
 			
 			col = win.width - 1,
-			border = "rounded"
+			border = "rounded",
+			focusable = true,
 		})
 end
 
