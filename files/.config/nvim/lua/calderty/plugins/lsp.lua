@@ -69,8 +69,15 @@ return {
 				},
 				settings = {
 					zls = {
-						warn_style=true,
-						inlay_hints_show_variable_type_hints=true,
+						zls={
+							warn_style=true,
+							inlay_hints_show_variable_type_hints=true,
+							operator_completions=true,
+							enable_autofix=true,
+							enable_semantic_tokens=true,
+							enable_build_on_save=true,
+							build_on_save_step="check",
+						}
 					}
 				},
 			}
