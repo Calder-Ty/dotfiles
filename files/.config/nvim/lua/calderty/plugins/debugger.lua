@@ -1,3 +1,13 @@
+local splitStr = function(inputstr)
+	split = "%s"
+	local t = {}
+	for str in string.gmatch(inputstr, "([^%s]+)") do
+		table.insert(t, str)
+	end
+	return t
+end
+
+
 return {
 	{ 
 		"rcarriga/nvim-dap-ui",
@@ -12,7 +22,7 @@ return {
 				type = 'server',
 				port = "13299",
 				executable = {
-					command = '/home/tyler/.local/bin/codelldb/adapter/codelldb',
+					command = '/home/tyler/.local/bin/codelldb',
 					args = { "--port", "13299" },
 				}
 			}
@@ -58,7 +68,7 @@ return {
 							end
 						end
 						cb = vim.schedule_wrap(cb)
-						vim.ui.select(vim.fn.glob(vim.fn.getcwd() .. '/zig-out/**/*', false, true), {
+						vim.ui.select(vim.fn.glob(vim.fn.getcwd() .. '**/zig-out/**/*', false, true), {
 							prompt = "Select executable",
 							kind="file",
 						}, 
@@ -67,6 +77,9 @@ return {
 					end,
 					cwd = "${workspaceFolder}",
 					stopOnEntry = false,
+					args = function()
+						return splitStr(vim.fn.input('Args: '))
+					end,
 				}
 			}
 
