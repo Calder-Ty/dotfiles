@@ -109,14 +109,14 @@ export EDITOR=vim
 export PATH="~/.local/bin:$PATH"
 # Get rid of undesired folders for fzf
 export FZF_DEFAULT_COMMAND='ag -l --ignore ".git" --hidden -g ""'
-export FZF_CTRL_T_COMMAND='fdfind --hidden'
+export FZF_CTRL_T_COMMAND='fd --hidden --exclude .git'
 
 
 pyenv () {
 	if [[ $# -eq  1 ]]; then
 		selected=$1
 	else
-		selected=$(find ~/Envs/ -mindepth 1 -maxdepth 1 -type d | fzf)
+		selected=$(find ~/Envs/ -mindepth 1 -maxdepth 1 -type d | fzf --tmux)
 	fi
 
 	if [[ -z $selected ]]; then

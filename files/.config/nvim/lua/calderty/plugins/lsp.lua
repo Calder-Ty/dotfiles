@@ -77,6 +77,7 @@ return {
 							enable_semantic_tokens=true,
 							enable_build_on_save=true,
 							build_on_save_step="check",
+							enable_inlay_hints=true,
 						}
 					}
 				},
