@@ -16,7 +16,6 @@ vim.opt.backup=true
 vim.opt.backupdir= vim.env.HOME .. '/.local/share/nvim/backupdir'
 vim.opt.undodir=vim.env.HOME .. '/.local/share/nvim/undodir'
 vim.opt.undofile=true
-vim.opt.colorcolumn="101"
 
 
 vim.opt.signcolumn="yes"
