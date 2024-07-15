@@ -5,7 +5,12 @@ local read_callout_file = function()
 	local current_file = vim.api.nvim_buf_get_name(0)
 	callout_file = current_file .. ".cout"
 	local lines = {}
-	for line in io.lines(callout_file) do
+	status, line_gen = pcall(io.lines, callout_file)
+	if not status then
+		print("No callout file found for current buffer")
+		return
+	end
+	for line in line_gen do
 		lines[#lines+1] = line
 	end
 	return lines
@@ -65,6 +70,9 @@ end
 
 local make_callout = function()
 	lines = read_callout_file()
+	if lines == nil then
+		return
+	end
 	data = parse_callout_file(lines)
 	win = Window()
 
@@ -98,3 +106,5 @@ end
 vim.api.nvim_create_user_command("CalloutTest", function(args)
 	make_callout()
 end, {})
+
+vim.keymap.set("n", "<leader><leader>c", ":Callout<cr>", {silent=true})

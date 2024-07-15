@@ -5,3 +5,4 @@ require("calderty.remaps") -- General Remaps
 require("calderty.tabline")
 require("calderty.lsp")
 require("calderty.ft_maps")
+require("calderty.callout")
