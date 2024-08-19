@@ -9,6 +9,7 @@
   "comment_toggle.nvim": { "branch": "master", "commit": "4d2dde6fc749c8159433d261b0976a58f7668ac3" },
   "gitsigns.nvim": { "branch": "main", "commit": "4aaacbf5e5e2218fd05eb75703fe9e0f85335803" },
   "harpoon": { "branch": "harpoon2", "commit": "0378a6c428a0bed6a2781d459d7943843f374bce" },
+  "ice-wyvern.nvim": { "branch": "master", "commit": "8e7b6ba5f6fbc720fd2dbc4dcfd5b9b793fcd209" },
   "lazy.nvim": { "branch": "main", "commit": "96584866b9c5e998cbae300594d0ccfd0c464627" },
   "lspkind.nvim": { "branch": "master", "commit": "1735dd5a5054c1fb7feaf8e8658dbab925f4f0cf" },
   "lualine.nvim": { "branch": "master", "commit": "0a5a66803c7407767b799067986b4dc3036e1983" },

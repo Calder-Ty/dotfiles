@@ -1,6 +1,11 @@
 return {
 	{ "hrsh7th/vim-vsnip" },
-
+	{ "Calder-Ty/Monocle.nvim", },
+	{ "Calder-Ty/ice-wyvern.nvim",
+		init = function()
+			require'icewyvern'.colorscheme()
+		end
+	},
 	{
 		"Calder-Ty/comment_toggle.nvim",
 		lazy=false,
@@ -8,12 +13,6 @@ return {
 			{"<leader>/", ":CommentToggle<CR>", mode='n', desc="Toggle Comment"},
 			{"<leader>/", ":CommentToggle<CR>", mode='v', desc="Toggle Comment"},
 		},
-	},
-	{
-		"Calder-Ty/Monocle.nvim",
-		init = function()
-			vim.cmd.colorscheme 'monocle'
-		end
 	},
 	{ "tpope/vim-surround" },
 

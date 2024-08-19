@@ -14,4 +14,3 @@ vim.opt.rtp:prepend(lazypath)
 -- This is required by lazy
 vim.g.mapleader = " "
 require("calderty")
-require("monocle").colorscheme()
