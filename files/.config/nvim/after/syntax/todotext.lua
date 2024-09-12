@@ -7,8 +7,10 @@ vim.cmd('syn region todotextCompleted start="^x" end="$"')
 vim.cmd('syn match todotextPriority "(\\u)"')
 -- Links
 vim.cmd('hi default link todotextCompleted Comment')
+vim.cmd('hi todotextCompleted gui=strikethrough')
 vim.cmd('hi default link todotextContext Identifier')
 vim.cmd('hi default link todotextProject Type')
 vim.cmd('hi default link todotextKey Tag')
 vim.cmd('hi default link todotextPriority Statement ')
 vim.cmd('hi default link todotextDate String')
+
