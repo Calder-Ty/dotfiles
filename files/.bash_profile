@@ -111,6 +111,9 @@ export PATH="~/.local/bin:$PATH"
 export FZF_DEFAULT_COMMAND='ag -l --ignore ".git" --hidden -g ""'
 export FZF_CTRL_T_COMMAND='fd --hidden --exclude .git'
 
+# use neovim for manpager
+export MANPAGER="nvim +Man!"
+
 
 pyenv () {
 	if [[ $# -eq  1 ]]; then
