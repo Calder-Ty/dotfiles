@@ -45,5 +45,6 @@ vim.opt.completeopt=menu,menuone,noselect,noinsert
 vim.opt.list = true
 vim.opt.updatetime=100
 
-
-
+-- Netrw stuff
+vim.g.netrwy_liststyle=3
+vim.g.netrw_banner=0
