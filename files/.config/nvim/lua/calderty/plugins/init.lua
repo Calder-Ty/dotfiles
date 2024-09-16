@@ -1,5 +1,4 @@
 return {
-	{ "hrsh7th/vim-vsnip" },
 	{ "Calder-Ty/Monocle.nvim", },
 	{ "Calder-Ty/ice-wyvern.nvim",
 		init = function()

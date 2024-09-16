@@ -1,5 +1,6 @@
 local osc52 = require("calderty.osc52")
 local api = vim.api
+local touch = require("calderty.touch")
 
 
 vim.keymap.set("i", "jk", "<Esc>", {})
@@ -20,6 +21,8 @@ vim.keymap.set("n","gx", '<Cmd>call jobstart(["brave-browser", expand("<cfile>")
 
 vim.keymap.set("x", "Y", osc52.copy_visual)
 
+
+vim.keymap.set("n", "<leader>n", touch.directories, {})
 
 vim.keymap.set("n", "k", function()
 	local count = api.nvim_get_vvar('count')

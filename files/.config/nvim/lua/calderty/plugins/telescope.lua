@@ -39,6 +39,7 @@ return {
 			vim.keymap.set("n", "<leader><leader>d", builtin.diagnostics, {})
 			vim.keymap.set("n", "<F1>", builtin.help_tags, {})
 			vim.keymap.set("n", "<F11>", builtin.keymaps, {})
+			vim.keymap.set("n", "z=", builtin.spell_suggest, {})
 
 			require('telescope').setup {
 				pickers = {
