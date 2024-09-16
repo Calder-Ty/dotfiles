@@ -5,6 +5,7 @@ import dataclasses
 import re
 import shlex
 import subprocess
+import sys
 import urllib.parse as uparse
 
 VERSION_REGEX = re.compile(r"https://ziglang\.org/download/(?P<version>.*)/zig-linux-x86_64-0\.13\.0\.tar\.xz")
@@ -13,16 +14,30 @@ DOWNLOAD_DIR = "/home/tyler/.local/bin/"
 DOWNLOAD_PATH = "/home/tyler/.local/bin/zig-linux-x86_64-{version}.tar.xz"
 BIN_PATH = "/home/tyler/.local/bin/zig-linux-x86_64-{version}/zig"
 
+ZLS_PATH = "https://github.com/zigtools/zls/releases/download/{version}/zls-x86_64-linux.tar.xz"
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("version", help="The Version to install")
     parser.add_argument("-n", "--no-relink", help="Do not relink `zig` command to this new version", action="store_false")
+    parser.add_argument("--no-zls", help="Do not update zls", action="store_true")
     args = parser.parse_args()
 
     version, url = version_and_url(args.version)
     download_tar(url)
-    unpack_tar(version)
+    unpack_tar(DOWNLOAD_PATH.format(version=version))
     link(version, relink=args.no_relink)
+
+    if args.no_zls:
+        exit(0)
+
+    try:
+        download_tar("https://github.com/zigtools/zls/releases/download/{version}/zls-x86_64-linux.tar.xz");
+    except subprocess.SubprocessError:
+        sys.stderr.write("Unable to download ZLS\n")
+    # TODO: Make it so we can link multiple versions of ZLS rather than have to
+    # Reinstall all the time
+    unpack_tar("/home/tyler/.local/bin/zls-x86_64-linux.tar.xz")
 
 def version_and_url(version)-> (str, str):
     """Converts the version argument into a standard url"""
@@ -39,8 +54,7 @@ def download_tar(url):
     print(f"Downloading from url")
     subprocess.run(shlex.split(cmd), cwd=DOWNLOAD_DIR)
 
-def unpack_tar(version):
-    tar_path = DOWNLOAD_PATH.format(version=version)
+def unpack_tar(tar_path):
     cmd = f"tar -xJf '{tar_path}'"
     out = subprocess.run(shlex.split(cmd), capture_output=True, cwd=DOWNLOAD_DIR)
     cmd = f"rm '{tar_path}'"
