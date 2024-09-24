@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""A Commit Calendar
+
+Displays a Commit Calendar in your terminal. For Fun.
+
+Notation:
+    w{variable} is a variable that represents a DayOfWeek
+"""
+import datetime as dt
+import collections
+import subprocess
+import sys
+import shlex
+
+from typing import List
+
+# TODO: Make it not be dependent on me!
+GIT_COMMAND = 'git log --committer="$(git config user.name)" --committer="Tyler*" --since={since} --format=format:%cs'
+DATE_FORMAT = "%Y-%m-%d"
+DOW_ORDER = ["M", "T", "W", "T", "F", "S", "S"]
+
+
+def main():
+    last_year = dt.date.today() - dt.timedelta(days=365)
+    cmd = GIT_COMMAND.format(since=dt.date.strftime(last_year, DATE_FORMAT))
+    res = subprocess.run(shlex.split(cmd), capture_output=True)
+    if res.returncode != 0:
+        sys.stderr.write(f"Error when getting Git history: {res.stderr.decode()}")
+        sys.exit(1)
+
+    data = res.stdout.decode().split("\n")
+    counts = collections.Counter(data)
+    make_chart(last_year, counts)
+
+
+def make_chart(start_date: dt.date, data: collections.Counter):
+    """Print out a Calendar Chart with ■ (\x25\xa0)"""
+    calendar: List[List[int]] = [[], [], [], [], [], [], []]
+    for i in range(365):
+        d = start_date + dt.timedelta(days=i)
+        calendar[d.weekday()].append(data.get(dt.date.strftime(d, DATE_FORMAT), 0))
+
+    dow_start = start_date.weekday()
+    for i, week in enumerate(calendar):
+        chars = []
+        if i < dow_start:
+            # Shift over a week
+            chars.append(" ")
+        chars.extend(map(lambda x: "■" if x else " ", week))
+        print(f"{DOW_ORDER[i]} {''.join(chars)}")
+
+    # We want it to look like this:
+
+    # M ■■        ■           ■■■ ■■■      ■■     ■   ■
+    # T ■  ■  ■       ■■■    ■ ■■   ■       ■■      ■
+    # W  ■   ■■         ■   ■■■    ■     ■  ■    ■■
+    # T  ■   ■■       ■■■  ■  ■  ■ ■■   ■■  ■    ■■ ■ ■
+    # F  ■   ■       ■■    ■    ■■ ■ ■    ■      ■■   ■   ■
+    # S
+    # S
+
+
+if __name__ == "__main__":
+    main()
