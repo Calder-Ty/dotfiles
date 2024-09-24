@@ -2,9 +2,16 @@
 """A Commit Calendar
 
 Displays a Commit Calendar in your terminal. For Fun.
+like this:
 
-Notation:
-    w{variable} is a variable that represents a DayOfWeek
+   J   F   M   A   M   J   J   A   S   O   N   D
+ M ■■        ■           ■■■ ■■■      ■■     ■   ■
+ T ■  ■  ■       ■■■    ■ ■■   ■       ■■      ■
+ W  ■   ■■         ■   ■■■    ■     ■  ■    ■■
+ T  ■   ■■       ■■■  ■  ■  ■ ■■   ■■  ■    ■■ ■ ■
+ F  ■   ■       ■■    ■    ■■ ■ ■    ■      ■■   ■   ■
+ S
+ S
 """
 import datetime as dt
 import collections
