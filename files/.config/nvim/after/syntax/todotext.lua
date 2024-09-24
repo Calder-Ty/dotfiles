@@ -8,7 +8,7 @@ vim.cmd('syn match todotextPriority "(\\u)"')
 -- Links
 vim.cmd('hi default link todotextCompleted Comment')
 vim.cmd('hi todotextCompleted gui=strikethrough')
-vim.cmd('hi default link todotextContext Identifier')
+vim.cmd('hi default link todotextContext Conditional')
 vim.cmd('hi default link todotextProject Type')
 vim.cmd('hi default link todotextKey Tag')
 vim.cmd('hi default link todotextPriority Statement ')
