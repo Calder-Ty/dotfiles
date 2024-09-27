@@ -3,26 +3,22 @@ local api = vim.api
 local touch = require("calderty.touch")
 
 
-vim.keymap.set("i", "jk", "<Esc>", {})
+vim.keymap.set("i", "jk", "<Esc>", {desc="Escape insert Mode"})
 
-vim.keymap.set("n", "<C-k>", "<Esc>:m .-2<CR>==")
-vim.keymap.set("n", "<C-j>", "<Esc>:m .+1<CR>==")
-vim.keymap.set("n", "]q", ":cnext<CR>")
-vim.keymap.set("n", "[q", ":cprev<CR>")
-vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv")
-vim.keymap.set("n", "]q", ":cnext<cr>")
-vim.keymap.set("n", "[q", ":cprev<cr>")
+vim.keymap.set("n", "<C-k>", "<Esc>:m .-2<CR>==", {desc="Shift line up"})
+vim.keymap.set("n", "<C-j>", "<Esc>:m .+1<CR>==", {desc="Shift lines down"})
+vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv", {desc="Shift selected lines down"})
+vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", {desc="Shift selected lines up"})
+vim.keymap.set("n", "]q", ":cnext<CR>", {desc="Next Quick Fix Item"})
+vim.keymap.set("n", "[q", ":cprev<CR>", {desc="Previous Quick Fix Item"})
 
-vim.keymap.set("n","Y", "y$")
-vim.keymap.set("n","Y", "y$")
+vim.keymap.set("n","Y", "y$", {desc="Yank to end of line")
 
-vim.keymap.set("n","gx", '<Cmd>call jobstart(["brave-browser", expand("<cfile>")])<CR>', {silent=true})
+vim.keymap.set("n","gx", '<Cmd>call jobstart(["brave-browser", expand("<cfile>")])<CR>', {silent=true, desc="Open Url in Browser"})
 
-vim.keymap.set("x", "Y", osc52.copy_visual)
+vim.keymap.set("x", "Y", osc52.copy_visual, {desc="Yank selection to clipboard")
 
-
-vim.keymap.set("n", "<leader>n", touch.directories, {})
+vim.keymap.set("n", "<leader>n", touch.directories, {desc="Create new file"})
 
 vim.keymap.set("n", "k", function()
 	local count = api.nvim_get_vvar('count')
@@ -47,13 +43,14 @@ vim.keymap.set("n", "j", function()
 end, {expr=true})
 
 -- diff get left
-vim.keymap.set("n", "<leader>ga", ":diffget //2<cr>", {})
+vim.keymap.set("n", "<leader>ga", ":diffget //2<cr>", {desc="Merge Conflict: diff get left"})
+vim.keymap.set("v", "<leader>g;", ":diffget //2<cr>", {desc="Merge Conflict: diff get selection left"})
 -- diff get right
-vim.keymap.set("n", "<leader>g;", ":diffget //3<cr>", {})
-vim.keymap.set("v", "<leader>g;", ":diffget //3<cr>", {})
+vim.keymap.set("n", "<leader>g;", ":diffget //3<cr>", {desc="Merge Conflict: diff get right"})
+vim.keymap.set("v", "<leader>g;", ":diffget //3<cr>", {desc="Merge Conflict: diff get selection right"})
 -- diff accept change
-vim.keymap.set("v", "<leader>gg", ":diffget<cr>", {})
-vim.keymap.set("n", "<leader>gg", ":diffget<cr>", {})
+vim.keymap.set("v", "<leader>gg", ":diffget<cr>", {desc="Diff accept selected change"})
+vim.keymap.set("n", "<leader>gg", ":diffget<cr>", {desc="Diff accept change"})
 -- diff put change
-vim.keymap.set("v", "<leader>gu", ":diffput<cr>", {})
-vim.keymap.set("n", "<leader>gu", ":diffput<cr>", {})
+vim.keymap.set("v", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
+vim.keymap.set("n", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
