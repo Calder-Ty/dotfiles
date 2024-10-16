@@ -38,11 +38,11 @@ M.directories = function (opts)
 			actions.select_default:replace(function()
 				actions.close(prompt_bufnr)
 				local selection = action_state.get_selected_entry()
-				print(vim.inspect(selection))
 				vim.ui.input({default_text=selection[1].."/"}, function (input)
 					if (string.sub(input, -1) ~= '/') then
 						local pos, _ = string.match(input, "()([^/]+)$")
-						vim.system({"mkdir", "-p", string.sub(input, 1, pos)}, {}):wait()
+						vim.inspect(print(string.sub(input,1,pos - 1)))
+						vim.system({"mkdir", "-p", string.sub(input, 1, pos - 1)}, {}):wait()
 					else
 						vim.system({"mkdir", "-p", input}, {}):wait()
 					end
