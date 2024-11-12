@@ -12,11 +12,11 @@ vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", {desc="Shift selected lines up"
 vim.keymap.set("n", "]q", ":cnext<CR>", {desc="Next Quick Fix Item"})
 vim.keymap.set("n", "[q", ":cprev<CR>", {desc="Previous Quick Fix Item"})
 
-vim.keymap.set("n","Y", "y$", {desc="Yank to end of line")
+vim.keymap.set("n","Y", "y$", {desc="Yank to end of line"})
 
 vim.keymap.set("n","gx", '<Cmd>call jobstart(["brave-browser", expand("<cfile>")])<CR>', {silent=true, desc="Open Url in Browser"})
 
-vim.keymap.set("x", "Y", osc52.copy_visual, {desc="Yank selection to clipboard")
+vim.keymap.set("x", "Y", osc52.copy_visual, {desc="Yank selection to clipboard"})
 
 vim.keymap.set("n", "<leader>n", touch.directories, {desc="Create new file"})
 
@@ -54,3 +54,17 @@ vim.keymap.set("n", "<leader>gg", ":diffget<cr>", {desc="Diff accept change"})
 -- diff put change
 vim.keymap.set("v", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
 vim.keymap.set("n", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
+
+-- Snippets
+vim.keymap.set({"i", "s"}, "<C-l>", function ()
+	if vim.snippet.active({direction=1}) then
+		vim.snippet.jump(1)
+	end
+end, {desc="Jump forward in the snippet"})
+vim.keymap.set({"i", "s"}, "<C-h>", function ()
+	if vim.snippet.active({direction=-1}) then
+		vim.snippet.jump(-1)
+	else
+		return "<C-h>"
+	end
+end, {desc="Jump forward in the snippet"})
