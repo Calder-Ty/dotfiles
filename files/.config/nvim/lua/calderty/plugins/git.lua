@@ -34,7 +34,7 @@ return {
 			local neogit = require("neogit")
 
 			vim.keymap.set("n", "<leader>gd", function () neogit.open({"diff"}) end, {desc="View diff of current file"})
-			vim.keymap.set("n", "<leader>gs", function () neogit.open() end, {desc="View git status"})
+			vim.keymap.set("n", "<leader>gs", function () neogit.open({kind="floating"}) end, {desc="View git status"})
 			vim.keymap.set("n", "<leader>gp", function () neogit.open({"push"}) end, {desc="Push commits to remote"})
 			vim.keymap.set("n", "<leader>gl", function () neogit.open({"log"}) end, {desc="View git log"})
 
