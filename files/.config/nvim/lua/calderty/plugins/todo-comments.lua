@@ -48,7 +48,7 @@ return {
 				-- NOTE: this is a note for you to look at
 				NOTE = {
 					color = "hint",
-					alt = {"INFO"},
+					alt = {"INFO", "NB"},
 				},
 
 				-- TODO: text that is highlighted as a todo note
