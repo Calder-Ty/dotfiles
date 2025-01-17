@@ -1,4 +1,5 @@
 RUST_OPTS = {
+	capabilities = require('blink.cmp').get_lsp_capabilities(),
 	flags = {
 		debounce_text_changes = 150,
 	},
@@ -42,16 +43,20 @@ RUST_OPTS = {
 return {
 	{
 		"neovim/nvim-lspconfig",
+		dependencies = { "saghen/blink.cmp" },
 		config = function(plugin, opts)
+			local capabilities = require('blink.cmp').get_lsp_capabilities()
 			local nvim_lsp = require('lspconfig')
 
 			local default_opts = {
+				capabilities = capabilities,
 				flags = {
 					debounce_text_changes = 150,
 				}
 			}
 
 			local py_opts = {
+				capabilities = capabilities,
 				flags = {
 					debounce_text_changes = 150,
 				},
@@ -64,6 +69,7 @@ return {
 			local rust_opts = RUST_OPTS
 
 			local zig_opts = {
+				capabilities = capabilities,
 				flags = {
 					debounce_text_changes = 150,
 				},
