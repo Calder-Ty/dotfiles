@@ -1,0 +1,65 @@
+window-theme=ghostty
+background=#161616
+foreground=#adafaf
+shell-integration=bash
+
+palette = 8=#75715e
+palette = 12=#66d9ef
+palette = 14=#a1efe4
+palette = 10=#a6e22e
+palette = 13=#ae81ff
+palette = 9=#f92672
+palette = 15=#f9f8f5
+palette = 11=#f4bf75
+
+palette = 0=#222222
+palette = 4=#3f76ce
+palette = 6=#a1efe4
+palette = 2=#088001
+palette = 5=#a72c77
+palette = 1=#f92672
+palette = 3=#e6db74
+
+background-opacity=.95
+unfocused-split-fill=#101010
+term="xterm-256color"
+fullscreen=true
+window-decoration=false
+font-size=15
+
+gtk-wide-tabs=false
+adw-toolbar-style=flat
+
+# Keybinds Mimicking my TMUX STUFF
+
+scrollback-limit=7000
+
+# SPLITS
+keybind = ctrl+ >shift+\=new_split:right
+keybind = ctrl+ >-=new_split:down
+keybind = ctrl+ >shift+s=new_window
+# move
+keybind = ctrl+ >h=goto_split:left
+keybind = ctrl+ >l=goto_split:right
+keybind = ctrl+ >j=goto_split:bottom
+keybind = ctrl+ >k=goto_split:top
+# Resize
+keybind = ctrl+ >shift+h=resize_split:left,100
+keybind = ctrl+ >shift+l=resize_split:right,100
+keybind = ctrl+ >shift+j=resize_split:down,50
+keybind = ctrl+ >shift+k=resize_split:up,50
+# zoom
+keybind = ctrl+ >z=toggle_split_zoom
+
+# Tabs
+keybind = ctrl+ >c=new_tab
+keybind = ctrl+ >shift+c=toggle_tab_overview
+keybind = ctrl+ >one=goto_tab:1
+keybind = ctrl+ >two=goto_tab:2
+keybind = ctrl+ >three=goto_tab:3
+keybind = ctrl+ >four=goto_tab:4
+keybind = ctrl+ >five=goto_tab:5
+keybind = ctrl+ >six=goto_tab:6
+keybind = ctrl+ >seven=goto_tab:7
+keybind = ctrl+ >eight=goto_tab:8
+keybind = ctrl+ >nine=goto_tab:9

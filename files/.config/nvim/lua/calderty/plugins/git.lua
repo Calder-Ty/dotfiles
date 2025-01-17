@@ -34,7 +34,7 @@ return {
 			local neogit = require("neogit")
 
 			vim.keymap.set("n", "<leader>gd", function () neogit.open({"diff"}) end, {desc="View diff of current file"})
-			vim.keymap.set("n", "<leader>gs", function () neogit.open({ kind = "split_below" }) end, {desc="View git status"})
+			vim.keymap.set("n", "<leader>gs", function () neogit.open({kind="floating"}) end, {desc="View git status"})
 			vim.keymap.set("n", "<leader>gp", function () neogit.open({"push"}) end, {desc="Push commits to remote"})
 			vim.keymap.set("n", "<leader>gl", function () neogit.open({"log"}) end, {desc="View git log"})
 
@@ -45,7 +45,14 @@ return {
 			end
 
 			vim.api.nvim_create_user_command("G", git_func, {nargs=1, complete="custom,v:lua.GitCompletionFunction"})
-			neogit.setup()
+			neogit.setup({
+				graph_style = "unicode",
+				disable_context_highlighting=true,
+				commit_editor= {
+					show_staged_diff = false,
+					kind = "tab"
+				}
+			})
 		end,
 
 		keys = {
@@ -61,7 +68,7 @@ return {
 			current_line_blame = true,
 			current_line_blame_opts = {
 				ignore_whitespace = true
-			}
+			},
 		}
 	},
 }

@@ -4,13 +4,13 @@ RUST_OPTS = {
 	},
 	tools = {
 		autoSetHints = true,
--- 		hover_with_actions = true,
--- 		inlay_hints = {
--- 			show_parameter_hints = false,
--- 			parameter_hints_preifx = "",
--- 			other_hints_prefix = "",
--- 			highlight = "RustInlay",
--- 		},
+		-- 		hover_with_actions = true,
+		-- 		inlay_hints = {
+		-- 			show_parameter_hints = false,
+		-- 			parameter_hints_preifx = "",
+		-- 			other_hints_prefix = "",
+		-- 			highlight = "RustInlay",
+		-- 		},
 
 	},
 	server = {
@@ -39,7 +39,7 @@ RUST_OPTS = {
 	},
 }
 
-return { 
+return {
 	{
 		"neovim/nvim-lspconfig",
 		config = function(plugin, opts)
@@ -56,7 +56,7 @@ return {
 					debounce_text_changes = 150,
 				},
 				pylsp = {
-					cmd = {"pylsp"}
+					cmd = { "pylsp" }
 				}
 			}
 
@@ -69,15 +69,15 @@ return {
 				},
 				settings = {
 					zls = {
-						zls={
-							warn_style=true,
-							inlay_hints_show_variable_type_hints=true,
-							operator_completions=true,
-							enable_autofix=true,
-							enable_semantic_tokens=true,
-							enable_build_on_save=true,
-							build_on_save_step="check",
-							enable_inlay_hints=true,
+						zls = {
+							warn_style = true,
+							inlay_hints_show_variable_type_hints = true,
+							operator_completions = true,
+							enable_autofix = true,
+							enable_semantic_tokens = true,
+							enable_build_on_save = true,
+							build_on_save_step = "check",
+							enable_inlay_hints = true,
 						}
 					}
 				},
@@ -90,14 +90,26 @@ return {
 			nvim_lsp.lua_ls.setup{default_opts}
 			nvim_lsp.jdtls.setup{java = {cmd="/home/tyler/software/java-language-server/dist/lang_server_linux.sh"}}
 
-			local signs = { Error = "", Warn = "", Hint = "󰌵", Info = ""}
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-			end
+			vim.diagnostic.config({
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = "",
+						[vim.diagnostic.severity.WARN] = "",
+						[vim.diagnostic.severity.HINT] = "󰌵",
+						[vim.diagnostic.severity.INFO] = "",
+					},
+					numhl = {
+						[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+						[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+						[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+						[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+					}
+
+				}
+			})
 		end
 	},
-	{ 
+	{
 		"simrat39/rust-tools.nvim",
 		event = "BufEnter *.rs",
 		config = function(plugin, opts)
@@ -105,4 +117,3 @@ return {
 		end
 	},
 }
-
