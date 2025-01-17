@@ -93,7 +93,8 @@ return {
 			nvim_lsp.pylsp.setup(py_opts)
 			nvim_lsp.zls.setup(zig_opts)
 			nvim_lsp.gopls.setup(default_opts)
-			nvim_lsp.lua_ls.setup { default_opts }
+			nvim_lsp.lua_ls.setup{default_opts}
+			nvim_lsp.jdtls.setup{java = {cmd="/home/tyler/software/java-language-server/dist/lang_server_linux.sh"}}
 
 			vim.diagnostic.config({
 				signs = {
