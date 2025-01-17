@@ -42,7 +42,7 @@ local function ui_input(opts, on_confirm, win_opts)
 	}
 
 	win_opts = vim.tbl_extend("force", default_win_opts, win_opts)
-	win_opts.width = #default_text + #prompt + 5 < win_opts.width and win_opts.width or #default_text + #prompt + 5
+	win_opts.width = #default_text + #prompt + 10 < win_opts.width and win_opts.width or #default_text + #prompt + 10
 
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
 	vim.api.nvim_set_option_value("winhighlight", "Search:None", {win=win})
