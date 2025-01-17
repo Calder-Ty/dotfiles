@@ -88,6 +88,7 @@ return {
 			nvim_lsp.zls.setup(zig_opts)
 			nvim_lsp.gopls.setup(default_opts)
 			nvim_lsp.lua_ls.setup{default_opts}
+			nvim_lsp.jdtls.setup{java = {cmd="/home/tyler/software/java-language-server/dist/lang_server_linux.sh"}}
 
 			local signs = { Error = "", Warn = "", Hint = "󰌵", Info = ""}
 			for type, icon in pairs(signs) do
