@@ -55,6 +55,7 @@ vim.keymap.set("n", "<leader>gg", ":diffget<cr>", {desc="Diff accept change"})
 vim.keymap.set("v", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
 vim.keymap.set("n", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
 
+vim.keymap.set("n", "<leader><leader>l", ":10sp .todo.tdt<CR>", {desc="Diff put selected changes"})
 -- Snippets
 vim.keymap.set({"i", "s"}, "<C-l>", function ()
 	if vim.snippet.active({direction=1}) then
@@ -68,3 +69,4 @@ vim.keymap.set({"i", "s"}, "<C-h>", function ()
 		return "<C-h>"
 	end
 end, {desc="Jump forward in the snippet"})
+

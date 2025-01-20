@@ -1,4 +1,5 @@
 -- Setings
+vim.opt.laststatus=3
 vim.opt.termguicolors = true
 vim.opt.showtabline=0
 vim.opt.errorbells = false

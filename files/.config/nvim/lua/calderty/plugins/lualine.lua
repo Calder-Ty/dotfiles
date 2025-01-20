@@ -1,4 +1,4 @@
-local theme = require("calderty.plugins.lualine_themes.monocle")
+local theme = require("calderty.plugins.lualine_themes.ice-wyvern")
 
 return {
 	'nvim-lualine/lualine.nvim',
