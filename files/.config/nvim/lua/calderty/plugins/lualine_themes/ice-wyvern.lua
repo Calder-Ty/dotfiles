@@ -1,4 +1,4 @@
-colors = require("icewyvern").colors
+colors = require("icewyvern").colors;
 
 return {
 	normal = {

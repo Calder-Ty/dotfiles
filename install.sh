@@ -12,7 +12,7 @@ pushd files
 mkdir -p ~/.local || true
 mkdir -p ~/.config || true
 
-stow bin -t ~/.local/
+stow bin -t ~/.local/bin
 stow .config -t ~/.config
 stow dots -t ~
 

@@ -147,5 +147,4 @@ export CUDA_HOME=/usr/local/cuda
 # Otherwise start tmux
 #[[ -z "$TMUX" ]] && exec tmux
 
-### BEGIN FROM DOTFILES
-### END FROM DOTFILES
+export EDITOR=vim
