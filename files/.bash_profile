@@ -63,7 +63,7 @@ fmt () {
 
 say_login_greeting () {
 
-	echo -e "$(bold OS):  $(lsb_release -d | cut -f2)"
+	echo -e "$(bold OS):  $(head -1 /etc/os-release | cut -d= -f2 | tr -d '"')"
 	echo -e "$(bold 'Uptime'):  $(uptime -p)"
 	echo ""
 	echo -e "$(italic $(sort ~/.greetings -R | head -n 1))"
