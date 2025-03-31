@@ -12,12 +12,9 @@
         "all-outputs": false,
         "format": "{icon}",
         "format-icons": {
-			"1:term": "",
-            "2:web": "",
-            "3:docs": "",
-            "4:work": "",
-            "5:music": "",
-            "6:code": "",
+			"1": "",
+            "2": "",
+            "3": "",
             "urgent": "",
             "focused": "",
             "default": ""
