@@ -3,7 +3,7 @@
 if [[ $# -eq  1 ]]; then
 	selected=$1
 else
-	selected=$(find ~/Documents ~/projects ~/src ~/projects/sandbox -mindepth 1 -maxdepth 1 -type d | cat - <(echo ~/.dotfiles) | fzf --tmux center)
+	selected=$(find ~/Documents  ~/src -mindepth 1 -maxdepth 1 -type d | cat - <(echo ~/.dotfiles) | fzf --tmux center)
 fi
 
 if [[ -z $selected ]]; then
