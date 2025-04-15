@@ -11,7 +11,7 @@ return {
 			highlight = {
 				multiline = true,
 				keyword = "bg",
-				after = "fg",
+				after = "none",
 			},
 			keywords = {
 
