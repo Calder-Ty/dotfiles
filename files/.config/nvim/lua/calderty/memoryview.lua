@@ -56,19 +56,17 @@ local toHexBytes = function (bytes)
 end
 
 local makeBuf = function ()
-	print("MAKING BUFFER!")
 	local bufno = vim.api.nvim_create_buf(false, true)
 	if (bufno == 0) then
 		error("Unable to create new buffer")
 	end
 	state.buf = bufno
-	print("buffer created, id: "..bufno)
 	vim.bo[bufno].modeline = false
 	vim.bo[bufno].bt = "nofile"
+	vim.bo[bufno].ft = "memory"
 end
 
 local makeWindow = function ()
-	print("MAKING WINDOW")
 	state.win = vim.api.nvim_open_win(state.buf, true, {
 		win = vim.api.nvim_get_current_win(),
 		split= "right",
@@ -98,9 +96,7 @@ local displayData = function ()
 	end
 	if not state.buf then
 		makeBuf()
-		print("win: "..tostring(state.win))
 	end
-	print("HELLO!?")
 	if not state.win then
 		makeWindow()
 	end
@@ -111,8 +107,8 @@ local displayData = function ()
 	local addr = state.base_address
 	local data = {}
 	for i, row in ipairs(hex_bytes) do
-		addr = string.format("0x%016x", ((i - 1) * 8) + tonumber(addr))
-		data[i] = addr .. ": " .. row
+		local a = string.format("0x%016x", ((i - 1) * 8) + tonumber(addr))
+		data[i] = a .. ": " .. row
 	end
 
 	vim.api.nvim_buf_set_lines(state.buf, 0, #hex_bytes, false, data)
@@ -163,6 +159,15 @@ local getMemoryReference = function (session, name)
 	end
 end
 
+local onStopped = function (sess, body)
+	if not sess.capabilities.supportsReadMemoryRequest then
+		return
+	end
+	if state.buf and state.base_address and state.win then
+		readMemory(sess, state.base_address)
+	end
+end
+
 ---Creates a window and shows the memory in the window, Beginning
 ---at the location of a variable.
 ---@param name string: name of variable where to start showing memory
@@ -183,7 +188,6 @@ M.showInMemory = function (name)
 		return
 	end
 	readMemory(sess, memoryReference)
-	displayData()
 end
 
 M.showInMemoryAddr = function(address) 
@@ -201,7 +205,13 @@ M.showInMemoryAddr = function(address)
 	readMemory(sess, address)
 end
 
-
+---Setup memoryview system
+---@param opts table A table of options. Currently there are none
+M.setup = function (opts)
+	_ = opts
+	-- Register our handlers
+	dap.listeners.after['event_stopped']['memoryview'] = onStopped
+end
 
 
 return M
