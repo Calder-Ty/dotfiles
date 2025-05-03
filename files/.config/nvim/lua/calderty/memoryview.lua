@@ -18,8 +18,6 @@ local state = {
 	win = nil,
 	buf = nil,
 }
-M.State = state
-
 
 local augroup = vim.api.nvim_create_augroup("memoryview", {
 	clear=true,
