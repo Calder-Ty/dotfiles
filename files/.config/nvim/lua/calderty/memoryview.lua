@@ -209,7 +209,13 @@ M.setup = function (opts)
 	_ = opts
 	-- Register our handlers
 	dap.listeners.after['event_stopped']['memoryview'] = onStopped
+
+	vim.api.nvim_create_user_command("MemoryViewAddr", function ()
+		local addr = vim.ui.input()
+		M.showInMemoryAddr(addr)
+	end, {})
 end
+
 
 
 return M
