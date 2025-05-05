@@ -134,74 +134,81 @@ local readMemory = function (session, memoryReference)
 	end)()
 end
 
-
---TODO: I would like to be able to give an address to do this as well.
----Get a local memory reference to the named variable.
----@param session any
----@param name any
----@return nil
-local getMemoryReference = function (session, name)
-	for _, scope in ipairs(session.current_frame.scopes) do
-		local var = nil
-		for _, v in ipairs(scope.variables) do
-			if v.name == name then
-				var = v
-				break
-			end
-		end
-		if var and var.variablesReference then
-			print("Memory Reference for " .. name .. ": " .. var.variablesReference)
-			return var.variablesReference
-		end
-		print("Variable `"..name.."` not found or no memory reference available")
-	end
-end
-
-local onStopped = function (sess, body)
-	if not sess.capabilities.supportsReadMemoryRequest then
+local onStopped = function (session, body)
+	if not session.capabilities.supportsReadMemoryRequest then
 		return
 	end
 	if state.buf and state.base_address and state.win then
-		readMemory(sess, state.base_address)
+		readMemory(session, state.base_address)
 	end
-end
-
----Creates a window and shows the memory in the window, Beginning
----at the location of a variable.
----@param name string: name of variable where to start showing memory
-M.showInMemory = function (name)
-	local sess = dap.session()
-	if not state.sess then
-		print("Unable to find active session to connect to")
-		return
-	end
-	if not sess.capabilities.supportsReadMemoryRequest then
-		-- TODO: Do fancy work to get name of the debug adapter
-		print("Debug Adapter Does not support ReadMemory Requests")
-		return
-	end
-
-	local memoryReference = getMemoryReference(sess, name)
-	if memoryReference == nil then
-		return
-	end
-	readMemory(sess, memoryReference)
 end
 
 M.showInMemoryAddr = function(address) 
-	local sess = dap.session()
-	if not sess then
+	local session = dap.session()
+	if not session then
 		print("Unable to find active session to connect to")
 		return
 	end
-	if not sess.capabilities.supportsReadMemoryRequest then
+	if not session.capabilities.supportsReadMemoryRequest then
 		-- TODO: Do fancy work to get name of the debug adapter
 		print("Debug Adapter Does not support ReadMemory Requests")
 		return
 	end
 
-	readMemory(sess, address)
+	readMemory(session, address)
 end
+
+---Get the local variables from session scope
+---@param session any
+---@return table
+local localVariables = function(session) 
+	local_variables = {}
+	for _, scope in ipairs(session.current_frame.scopes) do
+		if scope.presentationHint ~= "locals" then goto continue end
+		for i, var in ipairs(scope.variables) do
+			local_variables[i] = var.name
+		end
+		::continue::
+	end
+	return local_variables
+end
+
+local evaluate = function (session, expression)
+	local err, result = session:request("evaluate", {expression=expression, frameId=0})
+	if err then
+		print("Error evaluating: "..expression.." "..vim.inspect(err))
+		return err
+	end
+	return result
+end
+
+---Look up a Certain local variable and show it in memory
+---@param expression string
+M.showInMemory = function()
+	local session = dap.session()
+	if not session then
+		print("Unable to find active session to connect to")
+		return
+	end
+	if not session.capabilities.supportsReadMemoryRequest then
+		-- TODO: Do fancy work to get name of the debug adapter
+		print("Debugger `"..session.adapter.command.."` Does not support ReadMemory Requests")
+		return
+	end
+	--TODO: Allow for selecting non-local vars
+	local local_variables = localVariables(session)
+	local thread = coroutine.create(function()
+		local co, _ = coroutine.running()
+		vim.ui.select(local_variables, {}, function (item, _)
+			coroutine.resume(co, "&"..item)
+		end)
+		local var = coroutine.yield()
+		local res = evaluate(session, var)
+		readMemory(session, res.result)
+	end)
+	coroutine.resume(thread)
+end
+
 
 ---Setup memoryview system
 ---@param opts table A table of options. Currently there are none
@@ -211,11 +218,8 @@ M.setup = function (opts)
 	dap.listeners.after['event_stopped']['memoryview'] = onStopped
 
 	vim.api.nvim_create_user_command("MemoryViewAddr", function ()
-		local addr = vim.ui.input()
-		M.showInMemoryAddr(addr)
+		vim.ui.input({}, M.showInMemoryAddr)
 	end, {})
 end
-
-
 
 return M
