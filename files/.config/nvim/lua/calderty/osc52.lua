@@ -59,7 +59,7 @@ function M.copy(text)
     return
   end
 
-  local text_b64 = base64.enc(text)
+  local text_b64 = base64.encode(text)
   local osc = fmt('%s]52;c;%s%s', string.char(0x1b), text_b64, string.char(0x07))
   local success = false
 

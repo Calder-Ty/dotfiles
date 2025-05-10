@@ -128,7 +128,7 @@ local readMemory = function (session, memoryReference)
 			print("Error fetching memory: "..vim.inspect(err))
 			coroutine.yield(err)
 		end
-		state.data = base64.dec(result.data)
+		state.data = base64.decode(result.data)
 		state.base_address = result.address
 		displayData()
 	end)()
