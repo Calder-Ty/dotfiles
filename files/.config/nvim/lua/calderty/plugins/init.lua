@@ -5,14 +5,6 @@ return {
 			require'icewyvern'.colorscheme()
 		end
 	},
-	{
-		"Calder-Ty/comment_toggle.nvim",
-		lazy=false,
-		keys = {
-			{"<leader>/", ":CommentToggle<CR>", mode='n', desc="Toggle Comment"},
-			{"<leader>/", ":CommentToggle<CR>", mode='v', desc="Toggle Comment"},
-		},
-	},
 	{ "tpope/vim-surround" },
 
 	-- database stuff
