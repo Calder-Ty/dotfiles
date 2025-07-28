@@ -91,6 +91,34 @@ return {
 				}
 			}
 
+			dap.configurations.c = {
+				{
+					name = "Run Program",
+					type = "codelldb",
+					request = "launch",
+					program = function()
+						co = coroutine.running()
+						if co then
+							cb = function(item)
+								coroutine.resume(co, item)
+							end
+						end
+						cb = vim.schedule_wrap(cb)
+						vim.ui.select(vim.fn.glob(vim.fn.getcwd() .. '/bin/**/*', false, true), {
+								prompt = "Select executable",
+								kind = "file",
+							},
+							cb)
+						return coroutine.yield()
+					end,
+					cwd = "${workspaceFolder}",
+					stopOnEntry = false,
+					args = function()
+						return { vim.fn.input('Args: ') }
+					end,
+				}
+			}
+
 			dap.configurations.rust = {
 				{
 					name = "Run Program",
