@@ -30,7 +30,7 @@ return {
 				type = 'server',
 				port = "13299",
 				executable = {
-					command = '/home/tyler/.local/bin/codelldb',
+					command = 'lldb-dap',
 					args = { "--port", "13299" },
 				}
 			}
@@ -189,7 +189,10 @@ return {
 			vim.keymap.set("n", "<Leader>dn", dap.step_over, { silent = true })
 			vim.keymap.set("n", "<Leader>do", dap.step_out, { silent = true })
 			vim.keymap.set("n", "<Leader>ds", dap.step_into, { silent = true })
+			vim.keymap.set("n", "<Leader>dv", function () dapui.float_element("scopes", {enter=true}) end , { silent = true })
+			vim.keymap.set("n", "<Leader>dt", function () dapui.float_element("console", {enter=true}) end , { silent = true })
 			vim.keymap.set("n", "<Leader>dm", memoryview.showInMemory, { silent = true })
+			vim.keymap.set("n", "<Leader>da", memoryview.showInMemoryAddr, { silent = true })
 
 
 			dapui.setup()
@@ -227,7 +230,7 @@ return {
 						{
 							id = "repl",
 							size = 0.5
-						}
+						},
 					},
 					position = "bottom",
 					size = 10

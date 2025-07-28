@@ -1,24 +1,24 @@
-GitCompletionFunction = function (ArgLead, CmdLine, CursorPos)
-				return vim.fn.join({
-					"bisect",
-					"branch",
-					"cherry pick",
-					"commit",
-					"diff",
-					"fetch",
-					"ignore",
-					"log",
-					"merge",
-					"pull",
-					"push",
-					"rebase",
-					"remote",
-					"reset",
-					"revert",
-					"stash",
-					"tag",
-					"worktree",
-				}, '\n')
+GitCompletionFunction = function(ArgLead, CmdLine, CursorPos)
+	return {
+		"bisect",
+		"branch",
+		"cherry pick",
+		"commit",
+		"diff",
+		"fetch",
+		"ignore",
+		"log",
+		"merge",
+		"pull",
+		"push",
+		"rebase",
+		"remote",
+		"reset",
+		"revert",
+		"stash",
+		"tag",
+		"worktree",
+	}
 end
 
 return {
@@ -30,25 +30,27 @@ return {
 			"nvim-telescope/telescope.nvim",
 			"sindrets/diffview.nvim",
 		},
-		config= function ()
+		config = function()
 			local neogit = require("neogit")
 
-			vim.keymap.set("n", "<leader>gd", function () neogit.open({"diff"}) end, {desc="View diff of current file"})
-			vim.keymap.set("n", "<leader>gs", function () neogit.open({kind="floating"}) end, {desc="View git status"})
-			vim.keymap.set("n", "<leader>gp", function () neogit.open({"push"}) end, {desc="Push commits to remote"})
-			vim.keymap.set("n", "<leader>gl", function () neogit.open({"log"}) end, {desc="View git log"})
+			vim.keymap.set("n", "<leader>gd", function() neogit.open({ "diff" }) end, { desc =
+			"View diff of current file" })
+			vim.keymap.set("n", "<leader>gs", function() neogit.open({ kind = "floating" }) end, { desc =
+			"View git status" })
+			vim.keymap.set("n", "<leader>gp", function() neogit.open({ "push" }) end, { desc = "Push commits to remote" })
+			vim.keymap.set("n", "<leader>gl", function() neogit.open({ "log" }) end, { desc = "View git log" })
 
 			-- Add A User Command that we can use to invoke any neogit thing:
-			local git_func = function (args)
+			local git_func = function(args)
 				local cmd = args["args"]
-				neogit.open({cmd})
+				neogit.open({ cmd })
 			end
 
-			vim.api.nvim_create_user_command("G", git_func, {nargs=1, complete="custom,v:lua.GitCompletionFunction"})
+			vim.api.nvim_create_user_command("G", git_func, { nargs = 1, complete = GitCompletionFunction })
 			neogit.setup({
 				graph_style = "unicode",
-				disable_context_highlighting=true,
-				commit_editor= {
+				disable_context_highlighting = true,
+				commit_editor = {
 					show_staged_diff = false,
 					kind = "tab"
 				}
@@ -56,10 +58,10 @@ return {
 		end,
 
 		keys = {
-			{"<leader>gd", nil, desc="View diff of current file"},
-			{"<leader>gs", nil, desc="View git status"},
-			{"<leader>gp", nil, desc="Push commits to remote"},
-			{"<leader>gl", nil, desc="View git log"},
+			{ "<leader>gd", nil, desc = "View diff of current file" },
+			{ "<leader>gs", nil, desc = "View git status" },
+			{ "<leader>gp", nil, desc = "Push commits to remote" },
+			{ "<leader>gl", nil, desc = "View git log" },
 		}
 	},
 	{
@@ -72,4 +74,3 @@ return {
 		}
 	},
 }
-

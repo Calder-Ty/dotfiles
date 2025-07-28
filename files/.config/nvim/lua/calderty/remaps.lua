@@ -11,6 +11,8 @@ vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv", {desc="Shift selected lines dow
 vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", {desc="Shift selected lines up"})
 vim.keymap.set("n", "]q", ":cnext<CR>", {desc="Next Quick Fix Item"})
 vim.keymap.set("n", "[q", ":cprev<CR>", {desc="Previous Quick Fix Item"})
+vim.keymap.set("n", "<leader>/", "gcc", {desc="Comment out current line"})
+vim.keymap.set("v", "<leader>/", "gc", {desc="Comment out selected lines"})
 
 vim.keymap.set("n","Y", "y$", {desc="Yank to end of line"})
 

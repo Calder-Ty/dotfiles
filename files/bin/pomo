@@ -5,118 +5,145 @@ import dataclasses
 import datetime as dt
 import os
 import pathlib
+import socket
 import sys
 import typing
 
-POMO_PATH = pathlib.Path(os.getenv("HOME", "/var/run/pomo")) / ".pomofile"
+POMO_PATH = pathlib.Path("/tmp/.pomo");
 WORKING = 0
 RESTING = 1
 
 
-class PomoStatus(typing.NamedTuple):
-    work_sec: int
-    rest_sec: int
-    sec_left: int
-    status: int
-
-
-@dataclasses.dataclass
-class PomoRecord:
-    work_sec: int
-    rest_sec: int
-    start_time: int
-
-    def calc_status(self) -> PomoStatus:
-        sec_left, status = self.seconds_left()
-        return PomoStatus(
-            self.work_sec,
-            self.rest_sec,
-            sec_left,
-            status
-
-        )
-
-    def seconds_left(self) -> typing.Tuple[int, int]:
-        time_since_start = int(dt.datetime.utcnow().timestamp()) - self.start_time
-        cycle_secs = self.work_sec + self.rest_sec
-        if time_since_start < cycle_secs:
-            if time_since_start < self.work_sec:
-                return self.work_sec - time_since_start, WORKING
-            return cycle_secs - time_since_start, RESTING
-        else:
-            remainder = time_since_start % cycle_secs
-            if remainder < self.work_sec:
-                return self.work_sec - remainder, WORKING
-            else:
-                return cycle_secs - remainder, RESTING
-
-
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("cmd", choices = ["start", "status", "stop"])
+    parser.add_argument("cmd", choices = ["start", "status", "stop", "kill"])
+    parser.add_argument("--countdown", help="Display status in countdown fashion", action="store_true")
     args = parser.parse_args()
-    globals()[args.cmd]()
+    globals()[args.cmd](args)
 
 
-def start():
+def start(args):
     if not POMO_PATH.exists():
-        # Start A new Time
-        pomo_record = PomoRecord(
-            25 * 60,
-            5 * 60,
-            int(dt.datetime.utcnow().timestamp()),
-        )
-        with POMO_PATH.open("w") as fp:
-            fp.writelines(
-                [
-                    str(x) + "\n"
-                    for x in [
-                        pomo_record.work_sec,
-                        pomo_record.rest_sec,
-                        pomo_record.start_time,
-                    ]
-                ]
-            )
+        sys.stderr.write(f"ERROR: {POMO_PATH} does not exist. Did you forget to start pomod?\n")
+        sys.exit(1)
     else:
-        with POMO_PATH.open("r") as fp:
-            lines = [int(x) for x in fp.readlines()]
-        if not lines:
-            pomo_record = PomoRecord(
-                25 * 60, 5 * 60, int(dt.datetime.utcnow().timestamp())
-            )
-        else:
-            sys.stderr.write("Session Exists")
-            exit(1)
-        with POMO_PATH.open("w") as fp:
-            fp.writelines(
-                [
-                    str(x) + "\n"
-                    for x in [
-                        pomo_record.work_sec,
-                        pomo_record.rest_sec,
-                        pomo_record.start_time,
-                    ]
-                ]
-            )
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+            sock.connect(str(POMO_PATH))
+            # TODO: Make these parameters to the calls
+            # FIXME: Multiply by 60
+            sock.sendall(f"start {25*60} {5*60}".encode())
+            # There will never be a KB of space used in the buffer returned
+            resp = sock.recv(1024).decode('ascii')
+        try:
+            code = int(resp)
+        except ValueError:
+            sys.stderr.write(f"Unknown error code: {resp}\n")
+            sys.exit(1)
 
-def status():
+        match code:
+            case 0:
+                return
+            case 1:
+                sys.stderr.write(f"Missing Long Time: {code}\n")
+            case 2:
+                sys.stderr.write(f"Missing Short Time: {code}\n")
+            case 3:
+                sys.stderr.write(f"Invalid Long Time: {code}\n")
+            case 4:
+                sys.stderr.write(f"Invalid Short Time: {code}\n")
+            case 5:
+                sys.stderr.write(f"Session Exists: {code}\n")
+            case _:
+                sys.stderr.write(f"Unknown error code: {code}\n")
+        sys.exit(code)
+
+@dataclasses.dataclass
+class Status:
+    state: int
+    remaining_s: int
+    sess_complete: int
+
+class ServerResponseError(Exception):
+    pass
+
+class ServerErrorCode(Exception):
+    def __init__(self, code:int):
+        self.code = code
+
+def status(args):
     if not POMO_PATH.exists():
-        sys.stderr.write("No Session Active")
-        exit(1)
-    with POMO_PATH.open() as fp:
-        lines = fp.readlines()
-    if not lines:
-        sys.stderr.write("No Session Active")
-        exit(1)
+        sys.stderr.write(f"ERROR: {POMO_PATH} does not exist. Did you forget to start pomod?\n")
+        sys.exit(1)
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+        sock.connect(str(POMO_PATH))
+        sock.sendall(b"status")
+        chunks = []
+        bytes_read = 0
+        while (resp := sock.recv(1024)) != b'':
+            chunks.append(resp.decode())
+        data = "".join(chunks)
 
-    record = PomoRecord(*[int(x) for x in lines])
-    s = record.calc_status()
-    print(f'{s.status} {s.sec_left} {s.work_sec} {s.rest_sec}')
+    r = parse_status(data)
+    match r:
+        case Status():
+            if not args.countdown:
+                sys.stdout.write(f"{r.state} {r.remaining_s} {r.sess_complete}\n")
+            else:
+                sys.stdout.write(f"{r.state} {r.remaining_s // 60:0>2}:{r.remaining_s % 60:0>2} {r.sess_complete}\n")
+        case ServerResponseError():
+            sys.stderr.write("Server sent erroneous Response\n")
+            sys.exit(1)
+        case ServerErrorCode():
+            match r.code:
+                case -1:
+                    sys.stderr.write("Error: No Active Session\n")
+                case -1:
+                    sys.stderr.write("Error: Failure to Write the Status\n")
+                case _:
+                    sys.stderr.write(f"Error: Unknown error code {code}\n")
+            sys.exit(1)
 
-def stop():
-    with POMO_PATH.open('w') as fp:
-        fp.writelines('')
 
+def parse_status(resp: str) -> typing.Union[Status, ServerErrorCode, ServerResponseError]:
+    parts = resp.split()
+    try:
+        state = int(parts[0])
+    except ValueError:
+        return ServerResponseError()
+
+    if state < 0:
+        return ServerErrorCode(state)
+
+    if state not in [WORKING, RESTING]:
+        return ServerResponseError()
+
+    try:
+        remain = int(parts[1])
+    except:
+        return ServerResponseError()
+    
+    try:
+        completed = int(parts[2])
+    except:
+        return ServerResponseError()
+
+    return Status(state, remain, completed)
+
+
+def stop(args):
+    if not POMO_PATH.exists():
+        sys.stderr.write(f"ERROR: {POMO_PATH} does not exist. Did you forget to start pomod?\n")
+        sys.exit(1)
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+        sock.connect(str(POMO_PATH))
+        sock.sendall(b"stop")
+
+def kill(args):
+    if not POMO_PATH.exists():
+        return
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+        sock.connect(str(POMO_PATH))
+        sock.sendall(b"kill")
 
 if __name__ == "__main__":
     main()

@@ -117,14 +117,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Personal Aliases
-alias play='cd ~/PyProjects'
-alias todo='vim ~/Documents/ToDo.txt'
-alias android='source /usr/local/android-studio/bin/studio.sh'
-alias pd="pushd"
-
-
-
 
 # CUDA
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"
