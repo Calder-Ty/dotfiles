@@ -2,17 +2,16 @@
 if (vim.fn.executable('objdump') == 0) then
 	return
 end
----@class calderty.dis.Flags
----objdump Flags
---- @field syntax "att" | "intel" What syntax to use 'att' or 'intel', default is 'att'
---- @field dis_opts string[] List of target specific options to use, passed as the -M flag to objdump
 
----@type calderty.dis.Flags
-local options = {
-	syntax = 'att',
-	dis_opts = {},
-};
----
+----------------------------------------------------------------------------------------------------
+------------------------------------------- Types --------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+---objdump Flags
+---@class calderty.dis.Flags
+---@field syntax "att" | "intel" What syntax to use 'att' or 'intel', default is 'att'
+---@field dis_opts string[] List of target specific options to use, passed as the -M flag to objdump
+
 ---@class calderty.dis.Range
 ---@field first integer
 ---@field last integer
@@ -23,10 +22,20 @@ local options = {
 ---@field disassembly string[] The disassembly
 ---@field line_info calderty.dis.LineInfo?
 
+
+----------------------------------------------------------------------------------------------------
+------------------------------------------- Plugin -------------------------------------------------
+----------------------------------------------------------------------------------------------------
+M = {}
+
 ---@type calderty.dis.State
 State = {disassembly={}}
 
-M = {}
+---@type calderty.dis.Flags
+local options = {
+	syntax = 'att',
+	dis_opts = {},
+};
 
 --- Set up the module
 ---@param opts calderty.dis.Flags Options to be used with the dissasembler
