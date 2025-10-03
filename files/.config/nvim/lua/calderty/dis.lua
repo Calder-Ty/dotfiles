@@ -146,4 +146,15 @@ M.disassemble = function (bin)
 	vim.system(cmd, {text=true}, objdump_cb)
 end
 
+---Shows the Dissassembly at the current line.
+---TODO: Provide for selecting the binary to be dissassembled
+---TODO: Check if binary has been modified since last disassembly and re-run
+M.showDisassembly = function()
+	if State.line_info == nil then
+		local thread = coroutine.create(function ()
+			bin = st
+			M.disassemble()
+		end
+	end
+end
 return M
