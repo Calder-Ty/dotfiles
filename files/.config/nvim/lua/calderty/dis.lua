@@ -1,4 +1,5 @@
 -- A lua Dissassembly viewer
+local api = vim.api
 if (vim.fn.executable('objdump') == 0) then
 	return
 end
@@ -21,6 +22,7 @@ end
 ---@class calderty.dis.State
 ---@field disassembly string[] The disassembly
 ---@field line_info calderty.dis.LineInfo?
+---@field bin string?
 
 
 ----------------------------------------------------------------------------------------------------
@@ -123,38 +125,97 @@ local process_stdout = function (disassembly)
 	return files
 end
 
----Call back for handling data from disassembler
----@param out vim.SystemCompleted
-local objdump_cb = function (out)
-	print("Running coroutine")
-	if (out.code ~= 0) then
-		error("objdump failed with message:\n"..out.stderr)
-	end
-	State.line_info = process_stdout(out.stdout)
-	print("Completed  process_stdout")
-	print(vim.inspect(State.line_info))
-end
-
 --- Dissassemble a binary and store its
 ---@param bin string The path to the binary that is to be dissassembled. Can be relatve to current working dirctory
+---@return string
 M.disassemble = function (bin)
+	local co = coroutine.running()
+
 	local cmd = {"objdump", "-dl", "-M", options.syntax }
 	for _, value in ipairs(options) do
 		cmd[# cmd+1] = value
 	end
 	cmd[#cmd+1] = bin
-	vim.system(cmd, {text=true}, objdump_cb)
+
+	local out = vim.system(cmd, {text=true}):wait()
+	if (out.code ~= 0) then
+		vim.notify("objdump failed with message:\n"..out.stderr,
+		vim.log.levels.ERROR)
+		error(out.stderr)
+	end
+	return out.stdout
+end
+
+---@param blocks calderty.dis.Range[]
+local displayDisassembly = function (blocks, lineno)
+	local asm_buf = api.nvim_create_buf(false, true)
+	if asm_buf == 0 then error("Failed to create new buffer") end
+	api.nvim_set_option_value('filetype', 'asm', {buf=asm_buf})
+	local max_line_len = 0
+	for i, range in ipairs(blocks) do
+		local lines = {unpack(State.disassembly, range.first, range.last)}
+		for _, line in ipairs(lines) do
+			if line:len() > max_line_len then max_line_len = line:len() end
+		end
+		if i < #blocks then lines[#lines+1] = "//------//" end
+		api.nvim_buf_set_lines(asm_buf, -1, -1, false, lines)
+	end
+	local current_line = api.nvim_get_current_line()
+	local line_idx = string.find(current_line, "%S")
+
+	-- NOTE: The output of objdump uses tabs between the Address and Opcodes
+	-- we need to account for that in our max_line_len calculation as a tab
+	-- counts for just 1 character, but takes up muliples spaces
+	local tab_width = vim.lsp.util.get_effective_tabstop(asm_buf)
+	api.nvim_open_win(asm_buf, false, {
+		relative = 'win',
+		-- NOTE: This lineno is 1 indexed, bufpos needs 0 indexed
+		bufpos = {lineno-1, line_idx-1},
+		width = vim.fn.min({api.nvim_win_get_width(0), max_line_len+line_idx + tab_width}),
+		height = 10,
+		style = "minimal",
+		border = { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }
+	})
 end
 
 ---Shows the Dissassembly at the current line.
----TODO: Provide for selecting the binary to be dissassembled
 ---TODO: Check if binary has been modified since last disassembly and re-run
 M.showDisassembly = function()
-	if State.line_info == nil then
-		local thread = coroutine.create(function ()
-			bin = st
-			M.disassemble()
+	local thread = coroutine.create(function ()
+		if State.line_info == nil then
+			local co = coroutine.running()
+			vim.ui.input({
+				prompt = "Path> ",
+				completion = "file",
+			}, function (input)
+					if input == nil then return end
+					local ok, err = coroutine.resume(co, input)
+					if ok ~= true then
+						vim.notify(err, vim.log.levels.ERROR)
+					end
+			end)
+			State.bin = coroutine.yield()
+			local disassembly = M.disassemble(State.bin)
+			State.line_info = process_stdout(disassembly)
 		end
+		local current_file = api.nvim_buf_get_name(0)
+		local current_line = api.nvim_win_get_cursor(0)[1]
+		local fi = State.line_info[current_file]
+		if fi == nil then
+			vim.notify("No assembly found for "..current_file,vim.log.levels.INFO)
+			return
+		end
+		local li = fi[current_line]
+		if li == nil then
+			vim.notify("No assembly found for line #"..current_line ,vim.log.levels.INFO)
+			return
+		end
+		displayDisassembly(li, current_line)
+	end)
+	local ok, err = coroutine.resume(thread)
+	if ok ~= true then
+		vim.notify(err, vim.log.levels.ERROR)
 	end
 end
+
 return M
