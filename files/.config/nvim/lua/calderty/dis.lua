@@ -174,7 +174,7 @@ local displayDisassembly = function (blocks, lineno)
 		width = vim.fn.min({api.nvim_win_get_width(0), max_line_len+line_idx + tab_width}),
 		height = 10,
 		style = "minimal",
-		border = { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }
+		border = { "┏", "┅" ,"┓", "┋", "┛", "┅", "┗", "┋" }
 	})
 end
 
@@ -184,9 +184,9 @@ M.showDisassembly = function()
 	local thread = coroutine.create(function ()
 		if State.line_info == nil then
 			local co = coroutine.running()
-			vim.ui.input({
+			local bins = vim.fn.glob('`fd --no-ignore --type x`', false, true)
+			vim.ui.select(bins, {
 				prompt = "Path> ",
-				completion = "file",
 			}, function (input)
 					if input == nil then return end
 					local ok, err = coroutine.resume(co, input)
