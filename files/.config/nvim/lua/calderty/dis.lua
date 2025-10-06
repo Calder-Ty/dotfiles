@@ -216,8 +216,8 @@ M.showDisassembly = function()
 		if (State.bin_hash == nil or State.bin_hash ~= hash) then
 			local disassembly = disassemble(State.bin)
 			State.disassembly = vim.split(disassembly, "\n", {trimempty=true})
+			State.line_info = process_asm()
 		end
-		State.line_info = process_asm()
 		local current_file = api.nvim_buf_get_name(0)
 		local current_line = api.nvim_win_get_cursor(0)[1]
 		local fi = State.line_info[current_file]
