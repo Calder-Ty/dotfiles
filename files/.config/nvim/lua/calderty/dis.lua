@@ -23,6 +23,7 @@ end
 ---@field disassembly string[] The disassembly
 ---@field line_info calderty.dis.LineInfo?
 ---@field bin string?
+---@field bin_hash string?
 
 
 ----------------------------------------------------------------------------------------------------
@@ -70,12 +71,23 @@ local record_range = function (state, files, i)
 	files[state.currentfile] = fr
 end
 
+---Computes the Hash for binary
+---@param bin_path string
+---@return string?
+local compute_hash = function(bin_path)
+	local response = vim.system({'sha1sum', 'bin_path'}):wait()
+	if response.code ~= 0 then
+		vim.notify("Failed to calculate checksum hash, will result in recalculating disassembly every run", vim.log.levels.WARN)
+		return nil
+	end
+	return response.stdout
+end
+
 ---Processes the standard out of the file and returns
 ---a table of line data for every file in stdout
 ---@param disassembly string The result of an objdump
 ---@return calderty.dis.LineInfo
-local process_stdout = function (disassembly)
-	State.disassembly = vim.split(disassembly, "\n", {trimempty=true})
+local process_asm = function ()
 	---@type calderty.dis.LineInfo
 	local files = {}
 	-- Simple state machine for parsing disassembly
@@ -129,8 +141,6 @@ end
 ---@param bin string The path to the binary that is to be dissassembled. Can be relatve to current working dirctory
 ---@return string
 M.disassemble = function (bin)
-	local co = coroutine.running()
-
 	local cmd = {"objdump", "-dl", "-M", options.syntax }
 	for _, value in ipairs(options) do
 		cmd[# cmd+1] = value
@@ -182,7 +192,7 @@ end
 ---TODO: Check if binary has been modified since last disassembly and re-run
 M.showDisassembly = function()
 	local thread = coroutine.create(function ()
-		if State.line_info == nil then
+		if State.bin == nil then
 			local co = coroutine.running()
 			local bins = vim.fn.glob('`fd --no-ignore --type x`', false, true)
 			vim.ui.select(bins, {
@@ -195,9 +205,13 @@ M.showDisassembly = function()
 					end
 			end)
 			State.bin = coroutine.yield()
-			local disassembly = M.disassemble(State.bin)
-			State.line_info = process_stdout(disassembly)
 		end
+		local hash = compute_hash(State.bin)
+		if (State.bin_hash == nil or State.bin_hash ~= hash) then
+			local disassembly = M.disassemble(State.bin)
+			State.disassembly = vim.split(disassembly, "\n", {trimempty=true})
+		end
+		State.line_info = process_asm()
 		local current_file = api.nvim_buf_get_name(0)
 		local current_line = api.nvim_win_get_cursor(0)[1]
 		local fi = State.line_info[current_file]
