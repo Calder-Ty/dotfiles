@@ -75,9 +75,9 @@ end
 ---@param bin_path string
 ---@return string?
 local compute_hash = function(bin_path)
-	local response = vim.system({'sha1sum', 'bin_path'}):wait()
+	local response = vim.system({'sha1sum', bin_path}):wait()
 	if response.code ~= 0 then
-		vim.notify("Failed to calculate checksum hash, will result in recalculating disassembly every run", vim.log.levels.WARN)
+		vim.notify("Failed to calculate checksum hash, will result in recalculating disassembly every run. Error was: " .. response.stderr, vim.log.levels.WARN)
 		return nil
 	end
 	return response.stdout
@@ -140,7 +140,7 @@ end
 --- Dissassemble a binary and store its
 ---@param bin string The path to the binary that is to be dissassembled. Can be relatve to current working dirctory
 ---@return string
-M.disassemble = function (bin)
+local disassemble = function (bin)
 	local cmd = {"objdump", "-dl", "-M", options.syntax }
 	for _, value in ipairs(options) do
 		cmd[# cmd+1] = value
@@ -188,27 +188,33 @@ local displayDisassembly = function (blocks, lineno)
 	})
 end
 
+
+---Set the binary, can be called if you need to switch
+---what binary to disasemble
+local setBin = function ()
+	local co = coroutine.running()
+	local bins = vim.fn.glob('`fd --no-ignore --type x`', false, true)
+	vim.ui.select(bins, {
+		prompt = "Path> ",
+	}, function (input)
+			if input == nil then return end
+			local ok, err = coroutine.resume(co, input)
+			if ok ~= true then
+				vim.notify(err, vim.log.levels.ERROR)
+			end
+	end)
+	State.bin = coroutine.yield()
+end
+
 ---Shows the Dissassembly at the current line.
----TODO: Check if binary has been modified since last disassembly and re-run
 M.showDisassembly = function()
 	local thread = coroutine.create(function ()
 		if State.bin == nil then
-			local co = coroutine.running()
-			local bins = vim.fn.glob('`fd --no-ignore --type x`', false, true)
-			vim.ui.select(bins, {
-				prompt = "Path> ",
-			}, function (input)
-					if input == nil then return end
-					local ok, err = coroutine.resume(co, input)
-					if ok ~= true then
-						vim.notify(err, vim.log.levels.ERROR)
-					end
-			end)
-			State.bin = coroutine.yield()
+			setBin()
 		end
 		local hash = compute_hash(State.bin)
 		if (State.bin_hash == nil or State.bin_hash ~= hash) then
-			local disassembly = M.disassemble(State.bin)
+			local disassembly = disassemble(State.bin)
 			State.disassembly = vim.split(disassembly, "\n", {trimempty=true})
 		end
 		State.line_info = process_asm()
@@ -231,5 +237,7 @@ M.showDisassembly = function()
 		vim.notify(err, vim.log.levels.ERROR)
 	end
 end
+
+M.setBin = setBin
 
 return M
