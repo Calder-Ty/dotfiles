@@ -1,29 +1,32 @@
 window-theme=ghostty
-background=#161616
-foreground=#adafaf
 shell-integration=bash
 
-palette = 8=#75715e
-palette = 12=#66d9ef
-palette = 14=#a1efe4
-palette = 10=#a6e22e
-palette = 13=#ae81ff
-palette = 9=#f92672
-palette = 15=#f9f8f5
-palette = 11=#f4bf75
+palette = 0=#0d0c0c
+palette = 1=#c4746e
+palette = 2=#8a9a7b
+palette = 3=#c4b28a
+palette = 4=#8ba4b0
+palette = 5=#a292a3
+palette = 6=#8ea4a2
+palette = 7=#c8c093
+palette = 8=#a6a69c
+palette = 9=#e46876
+palette = 10=#87a987
+palette = 11=#e6c384
+palette = 12=#7fb4ca
+palette = 13=#938aa9
+palette = 14=#7aa89f
+palette = 15=#c5c9c5
 
-palette = 0=#222222
-palette = 4=#3f76ce
-palette = 6=#a1efe4
-palette = 2=#088001
-palette = 5=#a72c77
-palette = 1=#f92672
-palette = 3=#e6db74
+background = 181616
+foreground = c5c9c5
+cursor-color = c8c093
+selection-background = 2d4f67
+selection-foreground = c8c093
 
 background-opacity=.95
 unfocused-split-fill=#101010
 term="xterm-256color"
-fullscreen=true
 window-decoration=false
 font-size=15
 
@@ -63,3 +66,12 @@ keybind = ctrl+ >six=goto_tab:6
 keybind = ctrl+ >seven=goto_tab:7
 keybind = ctrl+ >eight=goto_tab:8
 keybind = ctrl+ >nine=goto_tab:9
+
+# Scrolling Output
+keybind = alt+u=scroll_page_fractional:-0.5
+keybind = alt+d=scroll_page_fractional:0.5
+# Inspector!
+keybind = alt+shift+i=inspector:toggle
+
+# View Command Pallete
+keybind = ctrl+ >shift+.=toggle_command_palette

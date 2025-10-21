@@ -50,3 +50,5 @@ vim.opt.updatetime=100
 -- Netrw stuff
 vim.g.netrwy_liststyle=3
 vim.g.netrw_banner=0
+
+-- colorscheme

@@ -1,6 +1,8 @@
 local osc52 = require("calderty.osc52")
 local api = vim.api
 local touch = require("calderty.touch")
+local dis = require("calderty.dis")
+dis.setup({})
 
 
 vim.keymap.set("i", "jk", "<Esc>", {desc="Escape insert Mode"})
@@ -57,7 +59,8 @@ vim.keymap.set("n", "<leader>gg", ":diffget<cr>", {desc="Diff accept change"})
 vim.keymap.set("v", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
 vim.keymap.set("n", "<leader>gu", ":diffput<cr>", {desc="Diff put selected changes"})
 
-vim.keymap.set("n", "<leader><leader>l", ":10sp .todo.tdt<CR>", {desc="Diff put selected changes"})
+vim.keymap.set("n", "<leader><leader>l", ":10sp .todo.tdt<CR>", {desc="View Todos"})
+vim.keymap.set("n", "<leader><leader>b", ":10sp ~/bugs.md<CR>", {desc="document Bugs that were written"})
 -- Snippets
 vim.keymap.set({"i", "s"}, "<C-l>", function ()
 	if vim.snippet.active({direction=1}) then
@@ -72,3 +75,8 @@ vim.keymap.set({"i", "s"}, "<C-h>", function ()
 	end
 end, {desc="Jump forward in the snippet"})
 
+
+-- Disassembly Module
+-- od -> ObjectDump
+vim.keymap.set("n", "<leader>od", dis.showDisassembly, {desc="Show this line's disassembly"})
+vim.keymap.set("n", "<leader>ob", dis.setBin, {desc="Show this line's disassembly"})
