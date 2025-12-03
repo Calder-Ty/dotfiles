@@ -5,7 +5,7 @@ local dis = require("calderty.dis")
 dis.setup({})
 
 
-vim.keymap.set("i", "jk", "<Esc>", {desc="Escape insert Mode"})
+vim.keymap.set("n", "<C-s>", ":w<CR>", {desc="Save file"})
 
 vim.keymap.set("n", "<C-k>", "<Esc>:m .-2<CR>==", {desc="Shift line up"})
 vim.keymap.set("n", "<C-j>", "<Esc>:m .+1<CR>==", {desc="Shift lines down"})

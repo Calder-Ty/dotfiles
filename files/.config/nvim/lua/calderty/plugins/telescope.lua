@@ -35,6 +35,7 @@ return {
 					"--no-ignore"
 				}}
 			) end, {})
+			vim.keymap.set("n", "<A-f>", builtin.lsp_document_symbols, {})
 			vim.keymap.set("n", "<leader>ps", builtin.grep_string, {})
 			vim.keymap.set("n", "<leader><leader>d", builtin.diagnostics, {})
 			vim.keymap.set("n", "<F1>", builtin.help_tags, {})
