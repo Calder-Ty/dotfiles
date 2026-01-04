@@ -17,10 +17,14 @@ local state = {
 	base_address = nil,
 	win = nil,
 	buf = nil,
+	reg = {
+		win = nil,
+		buf = nil,
+	}
 }
 
 local augroup = vim.api.nvim_create_augroup("memoryview", {
-	clear=true,
+	clear = true,
 })
 
 
@@ -31,7 +35,7 @@ end
 ---Convert To Hex Bytes
 ---@param bytes string
 ---@return string[]
-local toHexBytes = function (bytes)
+local toHexBytes = function(bytes)
 	local result = {}
 	local row = {}
 	local r = 1
@@ -53,7 +57,7 @@ local toHexBytes = function (bytes)
 	return result
 end
 
-local makeBuf = function ()
+local makeBuf = function()
 	local bufno = vim.api.nvim_create_buf(false, true)
 	if (bufno == 0) then
 		error("Unable to create new buffer")
@@ -64,22 +68,22 @@ local makeBuf = function ()
 	vim.bo[bufno].ft = "memory"
 end
 
-local makeWindow = function ()
+local makeWindow = function()
 	state.win = vim.api.nvim_open_win(state.buf, true, {
 		win = vim.api.nvim_get_current_win(),
-		split= "right",
+		split = "right",
 	})
 	vim.wo[state.win].number = false;
 	vim.wo[state.win].rnu = false;
 
-	vim.api.nvim_create_autocmd({"WinClosed"}, {
-		group=augroup,
-		pattern=tostring(state.win),
-		callback=function ()
+	vim.api.nvim_create_autocmd({ "WinClosed" }, {
+		group = augroup,
+		pattern = tostring(state.win),
+		callback = function()
 			state.win = nil
 			vim.api.nvim_buf_delete(state.buf, {
-				force=true,
-				unload=false,
+				force = true,
+				unload = false,
 			})
 			state.buf = nil
 		end
@@ -87,7 +91,7 @@ local makeWindow = function ()
 end
 
 ---Displays the data we have from our request
-local displayData = function ()
+local displayData = function()
 	if not state.base_address then
 		print("No Location selected to read memory from yet.")
 		return
@@ -116,16 +120,16 @@ end
 ---Read the memory using the debug adapter
 ---@param session any: The active session object
 ---@param memoryReference string: The MemoryReference returned from debugging tool
-local readMemory = function (session, memoryReference)
+local readMemory = function(session, memoryReference)
 	local args = {
 		memoryReference = tostring(memoryReference),
-		offset = 0,  --TODO: go back and retrieve some data from prior to this point
+		offset = 0, --TODO: go back and retrieve some data from prior to this point
 		count = 2048,
 	}
 	coroutine.wrap(function()
 		local err, result = session:request("readMemory", args)
 		if err then
-			print("Error fetching memory: "..vim.inspect(err))
+			print("Error fetching memory: " .. vim.inspect(err))
 			coroutine.yield(err)
 		end
 		state.data = base64.decode(result.data)
@@ -134,7 +138,7 @@ local readMemory = function (session, memoryReference)
 	end)()
 end
 
-local onStopped = function (session, body)
+local onStopped = function(session, body)
 	if not session.capabilities.supportsReadMemoryRequest then
 		return
 	end
@@ -143,7 +147,7 @@ local onStopped = function (session, body)
 	end
 end
 
-M.showInMemoryAddr = function(address) 
+M.showInMemoryAddr = function()
 	local session = dap.session()
 	if not session then
 		print("Unable to find active session to connect to")
@@ -155,35 +159,77 @@ M.showInMemoryAddr = function(address)
 		return
 	end
 
-	readMemory(session, address)
+	local thread = coroutine.create(function()
+		local co, _ = coroutine.running()
+		vim.ui.input({
+			prompt = "Address: ",
+		}, function(item, _)
+			if item == nil then
+				return
+			end
+			coroutine.resume(co, item)
+		end)
+		local addr = coroutine.yield()
+		readMemory(session, addr)
+	end)
+	coroutine.resume(thread)
 end
+
+---@class calderty.memoryview.Variable
+---@field scope string
+---@field data dap.Variable
 
 ---Get the local variables from session scope
 ---@param session any
----@return table
-local localVariables = function(session) 
-	local_variables = {}
-	for _, scope in ipairs(session.current_frame.scopes) do
-		if scope.presentationHint ~= "locals" then goto continue end
-		for i, var in ipairs(scope.variables) do
-			local_variables[i] = var.name
+---@return <dap.Variable>[]
+local variables = function(session)
+	local vars = {}
+	for _, scope in pairs(session.current_frame.scopes) do
+		if (scope.presentationHint == "registers") then goto continue end
+		if (scope.variables == nil) then goto continue end
+		for _, var in ipairs(scope.variables) do
+			vars[#vars + 1] = {
+				scope = scope.presentationHint,
+				data = var
+			}
 		end
 		::continue::
 	end
-	return local_variables
+	return vars
 end
 
-local evaluate = function (session, expression)
-	local err, result = session:request("evaluate", {expression=expression, frameId=0})
+---Get the state of the registers
+---@param session dap.Session
+---@return <dap.Variable>[]
+local registers = function(session)
+	local vars = {}
+	for _, scope in pairs(session.current_frame.scopes) do
+		if (scope.presentationHint ~= "registers") then goto continue end
+		if (scope.variables == nil) then goto continue end
+		for _, var in ipairs(scope.variables) do
+			vars[#vars + 1] = var
+		end
+		::continue::
+	end
+	return vars
+end
+
+local evaluate = function(session, expression)
+	local err, result = session:request("evaluate", { expression = expression, frameId = 0 })
 	if err then
-		print("Error evaluating: "..expression.." "..vim.inspect(err))
+		print("Error evaluating: " .. expression .. " " .. vim.inspect(err))
 		return err
 	end
 	return result
 end
 
+---Formats the Variable to be slected
+---@param item calderty.memoryview.Variable
+---@return string
+local function format_variable(item)
+	return item.data.name .. "\t(" .. item.scope .. ")"
+end
 ---Look up a Certain local variable and show it in memory
----@param expression string
 M.showInMemory = function()
 	local session = dap.session()
 	if not session then
@@ -191,16 +237,21 @@ M.showInMemory = function()
 		return
 	end
 	if not session.capabilities.supportsReadMemoryRequest then
-		-- TODO: Do fancy work to get name of the debug adapter
-		print("Debugger `"..session.adapter.command.."` Does not support ReadMemory Requests")
+		print("Debug Adapter `" .. session.adapter.command .. "` Does not support ReadMemory Requests")
 		return
 	end
 	--TODO: Allow for selecting non-local vars
-	local local_variables = localVariables(session)
+	local vars = variables(session)
 	local thread = coroutine.create(function()
 		local co, _ = coroutine.running()
-		vim.ui.select(local_variables, {}, function (item, _)
-			coroutine.resume(co, "&"..item)
+		vim.ui.select(vars, {
+			prompt = "View variable in memory",
+			format_item = format_variable
+		}, function(item, _)
+			if item == nil then
+				return
+			end
+			coroutine.resume(co, "&" .. item.data.name)
 		end)
 		local var = coroutine.yield()
 		local res = evaluate(session, var)
@@ -209,15 +260,50 @@ M.showInMemory = function()
 	coroutine.resume(thread)
 end
 
+local function renderRegisters(session)
+	local regs = registers(session)
+	local lines = {}
+	for _, reg in ipairs(regs) do
+		lines[# lines + 1] = reg.name .. ": " .. reg.value
+	end
+	vim.api.nvim_buf_set_lines(state.reg.buf, 0, #lines, false, lines)
+end
+
+M.showRegisters = function()
+	print("Showing Registers")
+	local session = dap.session()
+	if not session then
+		print("Unable to find active session to connect to")
+		return
+	end
+	if not session.capabilities.supportsReadMemoryRequest then
+		print("Debug Adapter `" .. session.adapter.command .. "` Does not support ReadMemory Requests")
+		return
+	end
+	local bufno = vim.api.nvim_create_buf(false, true)
+	if (bufno == 0) then
+		error("Unable to create new buffer")
+	end
+	state.reg.buf = bufno
+	local win = vim.api.nvim_open_win(state.reg.buf, true, {
+		win = vim.api.nvim_get_current_win(),
+		split = "right",
+	})
+	if (win == 0) then
+		error("Unable to create new window")
+	end
+	state.reg.win = win
+	renderRegisters(session)
+end
 
 ---Setup memoryview system
 ---@param opts table A table of options. Currently there are none
-M.setup = function (opts)
+M.setup = function(opts)
 	_ = opts
 	-- Register our handlers
 	dap.listeners.after['event_stopped']['memoryview'] = onStopped
 
-	vim.api.nvim_create_user_command("MemoryViewAddr", function ()
+	vim.api.nvim_create_user_command("MemoryViewAddr", function()
 		vim.ui.input({}, M.showInMemoryAddr)
 	end, {})
 end

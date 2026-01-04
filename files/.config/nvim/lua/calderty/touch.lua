@@ -17,7 +17,7 @@ M = {}
 M.directories = function (opts)
 	opts = opts or {}
 	local entry_maker = opts.entry_maker or make_entry.gen_from_string(opts)
-	local results = vim.system({"fdfind", "--type", "d", "--hidden"}, {text=true},nil):wait()
+	local results = vim.system({"fd", "--type", "d", "--hidden"}, {text=true},nil):wait()
 	if results.code ~= 0 then
 		error("Failed to conduct find")
 	end

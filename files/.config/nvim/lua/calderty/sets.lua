@@ -1,14 +1,17 @@
--- Setings
-vim.opt.laststatus=3
+vim.o.number = true
+vim.o.rnu = true
+vim.o.background = "dark"
+vim.o.swapfile = false
+vim.o.spell = true
+vim.o.spelllang = 'en_us'
+vim.o.spelloptions = 'camel'
 vim.opt.termguicolors = true
-vim.opt.showtabline=0
 vim.opt.errorbells = false
 vim.opt.visualbell = true
 vim.opt.cursorline = true
 vim.opt.hlsearch = false
-vim.opt.scrolloff=15
+vim.opt.scrolloff=10
 vim.opt.colorcolumn="100"
-
 vim.opt.tabstop=4
 vim.opt.softtabstop=4
 vim.opt.shiftwidth=4
@@ -18,37 +21,16 @@ vim.opt.backup=true
 vim.opt.backupdir= vim.env.HOME .. '/.local/share/nvim/backupdir'
 vim.opt.undodir=vim.env.HOME .. '/.local/share/nvim/undodir'
 vim.opt.undofile=true
-
-
-vim.opt.signcolumn="yes"
-vim.opt.ruler=true
-vim.opt.nu = true
-vim.opt.rnu = true
--- " Faster macros
+vim.opt.completeopt="menu,menuone,noselect,noinsert,fuzzy"
 vim.opt.lazyredraw = true
--- " show matching {[()]}
-vim.opt.showmatch = true
--- " folding
-vim.opt.foldenable = true
-vim.opt.foldlevelstart=10
-vim.opt.foldnestmax=10
-vim.opt.foldmethod="indent"
-
-vim.opt.splitbelow = true
-vim.opt.hidden = true
-
-vim.opt.spell = true
-vim.opt.spelllang="en_us"
-
--- " set listchars+=multispace:···+
--- " set listchars+=eol:↵
-vim.opt.listchars = { trail = '·', tab = '» ', leadmultispace = '│   '}
-vim.opt.completeopt=menu,menuone,noselect,noinsert
-vim.opt.list = true
-vim.opt.updatetime=100
-
--- Netrw stuff
-vim.g.netrwy_liststyle=3
+vim.opt.signcolumn='yes'
+vim.opt.ruler=true
+vim.g.netrw_liststyle=1
+vim.g.netrw_sort_by='name'
+vim.g.netrw_sort_options='i'
 vim.g.netrw_banner=0
-
--- colorscheme
+vim.g.mapleader = ' '
+vim.opt.listchars = { trail = '·', tab = '» ', leadmultispace = '│   '}
+vim.opt.laststatus = 3
+vim.opt.winborder = 'rounded'
+vim.opt.pumborder = 'rounded'

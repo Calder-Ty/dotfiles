@@ -177,7 +177,7 @@ local displayDisassembly = function (blocks, lineno)
 	-- we need to account for that in our max_line_len calculation as a tab
 	-- counts for just 1 character, but takes up muliples spaces
 	local tab_width = vim.lsp.util.get_effective_tabstop(asm_buf)
-	api.nvim_open_win(asm_buf, false, {
+	local win = api.nvim_open_win(asm_buf, false, {
 		relative = 'win',
 		-- NOTE: This lineno is 1 indexed, bufpos needs 0 indexed
 		bufpos = {lineno-1, line_idx-1},
@@ -185,6 +185,13 @@ local displayDisassembly = function (blocks, lineno)
 		height = 10,
 		style = "minimal",
 		border = { "┏", "┅" ,"┓", "┋", "┛", "┅", "┗", "┋" }
+	})
+	local augroup = api.nvim_create_augroup('calderty.dis', {clear=true})
+	api.nvim_create_autocmd({'CursorMoved'}, {
+		once=true,
+		callback = function(ev)
+			api.nvim_win_close(win, true)
+		end
 	})
 end
 
