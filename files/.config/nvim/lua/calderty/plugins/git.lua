@@ -20,3 +20,4 @@ vim.keymap.set({'n'}, "<leader>gh", ":Gitsigns setqflist all<CR>", {desc="Put al
 vim.keymap.set({'n'}, "<leader>gH", ":Gitsigns setqflist 0<CR>", {desc="Put current buffer hunks into quickfix list"})
 vim.keymap.set({'n'}, "<leader>gs", telescope.git_status, {desc="Git Status"})
 vim.keymap.set({'n'}, "<leader>gc", ":G commit<CR>", {desc="Commit"})
+vim.keymap.set({'n'}, "<leader>gp", ":G push<CR>", {desc="Commit"})
