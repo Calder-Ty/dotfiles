@@ -3,4 +3,5 @@ require("calderty.plugins")
 require("calderty.remaps")
 require("calderty.ui")
 require("calderty.lsp")
-
+require("calderty.treesitter")
+require("calderty.zig-compile")

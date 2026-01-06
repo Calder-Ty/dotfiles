@@ -34,3 +34,5 @@ vim.opt.listchars = { trail = '·', tab = '» ', leadmultispace = '│   '}
 vim.opt.laststatus = 3
 vim.opt.winborder = 'rounded'
 vim.opt.pumborder = 'rounded'
+vim.opt.foldenable = true
+vim.opt.foldlevel = 99

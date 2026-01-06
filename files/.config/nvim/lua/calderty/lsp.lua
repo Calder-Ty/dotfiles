@@ -44,7 +44,7 @@ config['zls'] = {
 	}
 }
 
-vim.lsp.enable('lua_ls')
+vim.lsp.enable('zls')
 
 
 -- Keymaps
