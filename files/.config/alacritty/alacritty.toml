@@ -30,5 +30,5 @@ animation = "EaseOutSine"
 
 [general]
 import = [
-	"~/.config/alacritty/themes/monocle.toml"
+	"~/.config/alacritty/themes/kanagawa.toml"
 ]
