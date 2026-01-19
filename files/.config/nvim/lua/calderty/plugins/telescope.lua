@@ -1,8 +1,15 @@
 vim.pack.add({
 	{src = "https://github.com/nvim-telescope/telescope.nvim"},
+	{src = "https://github.com/nvim-telescope/telescope-ui-select.nvim"},
 })
 
-builtin = require("telescope.builtin")
+require("telescope").setup({
+	extension = {
+		["ui-select"] = {
+			require("telescope.themes").get_dropdown {}
+}}})
+require("telescope").load_extension('ui-select')
+local builtin = require("telescope.builtin")
 -- set keymaps
 vim.keymap.set("n", "<leader>pf", function() builtin.find_files({no_ignore=false, hidden=true}) end, {})
 vim.keymap.set("n", "<leader><C-r>", builtin.registers, {})
