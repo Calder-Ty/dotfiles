@@ -21,12 +21,12 @@ vim.opt.backup=true
 vim.opt.backupdir= vim.env.HOME .. '/.local/share/nvim/backupdir'
 vim.opt.undodir=vim.env.HOME .. '/.local/share/nvim/undodir'
 vim.opt.undofile=true
-vim.opt.completeopt="menu,menuone,noselect,noinsert,fuzzy"
+vim.opt.completeopt="menu,menuone,fuzzy,noinsert"
 vim.opt.lazyredraw = true
 vim.opt.signcolumn='yes'
 vim.opt.ruler=true
 vim.g.netrw_liststyle=1
-vim.g.netrw_sort_by='name'
+vim.g.netrw_sort_by='exten'
 vim.g.netrw_sort_options='i'
 vim.g.netrw_banner=0
 vim.g.mapleader = ' '
@@ -36,3 +36,21 @@ vim.opt.winborder = 'rounded'
 vim.opt.pumborder = 'rounded'
 vim.opt.foldenable = true
 vim.opt.foldlevel = 99
+vim.opt.complete = 'o,.,w,b'
+vim.opt.efm = ""
+vim.opt.efm:append({
+	-- file/path.zig:18:36: error: use of undeclared identifier 'Allocator'
+	"%f:%l:%c: %trror: %m",
+	"%E%trror: %m: ====== expected this output: =========",
+	"%Z%f:%l:%c: %m",
+	-- error: 'elf.Header.decltest.parse' failed: file/path.zig:1:3
+	"%trror: %m: %f:%l:%c:%.%#",
+	"%f:%l:%c: %m",
+	-- Ignore errors about commands failng
+	"%-Eerror: the following command failed%.%#",
+	"%-Z%f build-exe%.%#",
+	-- error: /file/path.zig: non-conforming formatting
+	"%trror: %f: %m",
+	"%C%.%#",
+})
+

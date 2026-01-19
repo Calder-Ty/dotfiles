@@ -3,7 +3,7 @@ local errfile = vim.fn.getcwd() .. "/.errfile"
 vim.opt.errorfile = errfile
 M = {}
 State = {
-	cmd = {"zig", "build", "-fincremental"},
+	cmd = {"zig", "build",},
 	status = -1
 }
 
@@ -52,5 +52,11 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	desc = "Build on Save",
 	callback = function(_) M.compile() end
 })
+
+M.setCommand = function()
+	vim.ui.input({prompt="New Command"}, function(input) State.cmd = vim.fn.split(input) end)
+end
+
+vim.api.nvim_create_user_command("Zccmd", M.setCommand, {desc="Change command for Zig Compile"})
 
 return M

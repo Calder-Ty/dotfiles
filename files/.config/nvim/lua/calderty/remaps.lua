@@ -48,6 +48,10 @@ vim.keymap.set("n", "j", function()
 	return cmd .. "j"
 end, {expr=true})
 
+-- Compile Keymaps
+vim.keymap.set("n", "<leader>e", ":cf<CR>:copen<CR>", {desc="Open quick fix list of compiler errors"})
+vim.keymap.set("n", "<leader>E", ":e .errfile<CR>", {desc="Open errfile"})
+
 -- Disassembly Module
 -- od -> ObjectDump
 vim.keymap.set("n", "<leader>od", dis.showDisassembly, {desc="Show this line's disassembly"})
