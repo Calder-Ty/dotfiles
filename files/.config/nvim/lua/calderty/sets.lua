@@ -21,7 +21,7 @@ vim.opt.backup=true
 vim.opt.backupdir= vim.env.HOME .. '/.local/share/nvim/backupdir'
 vim.opt.undodir=vim.env.HOME .. '/.local/share/nvim/undodir'
 vim.opt.undofile=true
-vim.opt.completeopt="menu,menuone,fuzzy,noinsert"
+vim.opt.completeopt="menu,menuone,fuzzy,noinsert,noselect"
 vim.opt.lazyredraw = true
 vim.opt.signcolumn='yes'
 vim.opt.ruler=true
@@ -36,7 +36,7 @@ vim.opt.winborder = 'rounded'
 vim.opt.pumborder = 'rounded'
 vim.opt.foldenable = true
 vim.opt.foldlevel = 99
-vim.opt.complete = 'o,.,w,b'
+vim.opt.complete = 'o'
 vim.opt.efm = ""
 vim.opt.efm:append({
 	-- file/path.zig:18:36: error: use of undeclared identifier 'Allocator'
