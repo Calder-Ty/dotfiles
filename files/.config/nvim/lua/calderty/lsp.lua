@@ -38,12 +38,13 @@ config['zls'] = {
 		warn_style = true,
 		operator_completions = true,
 		enable_autofix = true,
+		enable_snippets = true,
 		enable_semantic_tokens = true,
 		enable_build_on_save = true,
 		build_on_save_step = "check",
 	}
+	
 }
-
 vim.lsp.enable('zls')
 
 

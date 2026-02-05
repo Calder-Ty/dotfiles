@@ -1,7 +1,27 @@
 -- Themes: 
-vim.pack.add({"https://github.com/rebelot/kanagawa.nvim"})
+vim.pack.add({
+	"https://github.com/rebelot/kanagawa.nvim",
+	"https://github.com/tpope/vim-dadbod",
+	"https://github.com/kristijanhusak/vim-dadbod-ui",
+	"https://github.com/folke/todo-comments.nvim",
+})
 
-kanagawa =  require("kanagawa")
+local todo = require("todo-comments")
+todo.setup({
+	signs=false,
+	gui_style = {
+		fg = "NONE",
+		bg = "NONE",
+	},
+	highlight = {
+		multiline = false,
+		keyword = "fg",
+		after = "",
+	}
+})
+
+local kanagawa =  require("kanagawa")
+
 kanagawa.setup({
 	colors = {
 		theme = {

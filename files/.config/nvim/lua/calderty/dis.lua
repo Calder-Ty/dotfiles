@@ -24,6 +24,7 @@ end
 ---@field line_info calderty.dis.LineInfo?
 ---@field bin string?
 ---@field bin_hash string?
+---@field ns_id integer?
 
 
 ----------------------------------------------------------------------------------------------------
@@ -32,7 +33,10 @@ end
 M = {}
 
 ---@type calderty.dis.State
-State = {disassembly={}}
+State = {
+	disassembly={},
+	ns_id = nil
+}
 
 ---@type calderty.dis.Flags
 local options = {
@@ -158,40 +162,16 @@ end
 
 ---@param blocks calderty.dis.Range[]
 local displayDisassembly = function (blocks, lineno)
-	local asm_buf = api.nvim_create_buf(false, true)
-	if asm_buf == 0 then error("Failed to create new buffer") end
-	api.nvim_set_option_value('filetype', 'asm', {buf=asm_buf})
-	local max_line_len = 0
-	for i, range in ipairs(blocks) do
-		local lines = {unpack(State.disassembly, range.first, range.last)}
-		for _, line in ipairs(lines) do
-			if line:len() > max_line_len then max_line_len = line:len() end
-		end
-		if i < #blocks then lines[#lines+1] = "//------//" end
-		api.nvim_buf_set_lines(asm_buf, -1, -1, false, lines)
+	api.nvim_buf_clear_namespace(0, State.ns_id, lineno - 1, lineno)
+	-- FIXME: Add armode to switch between copies of asm for generic functions/lines
+	local range = blocks[1]
+	local lines = {unpack(State.disassembly, range.first, range.last)}
+	local virt_lines = {}
+	for _, line in ipairs(lines) do
+		virt_lines[#virt_lines+1] = {{line, "Normal"}}
 	end
-	local current_line = api.nvim_get_current_line()
-	local line_idx = string.find(current_line, "%S")
-
-	-- NOTE: The output of objdump uses tabs between the Address and Opcodes
-	-- we need to account for that in our max_line_len calculation as a tab
-	-- counts for just 1 character, but takes up muliples spaces
-	local tab_width = vim.lsp.util.get_effective_tabstop(asm_buf)
-	local win = api.nvim_open_win(asm_buf, false, {
-		relative = 'win',
-		-- NOTE: This lineno is 1 indexed, bufpos needs 0 indexed
-		bufpos = {lineno-1, line_idx-1},
-		width = vim.fn.min({api.nvim_win_get_width(0), max_line_len+line_idx + tab_width}),
-		height = 10,
-		style = "minimal",
-		border = { "┏", "┅" ,"┓", "┋", "┛", "┅", "┗", "┋" }
-	})
-	local augroup = api.nvim_create_augroup('calderty.dis', {clear=true})
-	api.nvim_create_autocmd({'CursorMoved'}, {
-		once=true,
-		callback = function(ev)
-			api.nvim_win_close(win, true)
-		end
+	api.nvim_buf_set_extmark(0, State.ns_id, lineno - 1, 0, {
+		virt_lines = virt_lines
 	})
 end
 
@@ -215,6 +195,9 @@ end
 
 ---Shows the Dissassembly at the current line.
 M.showDisassembly = function()
+	if State.ns_id == nil then
+		State.ns_id = api.nvim_create_namespace('calderty.dis')
+	end
 	local thread = coroutine.create(function ()
 		if State.bin == nil then
 			setBin()
@@ -245,6 +228,14 @@ M.showDisassembly = function()
 	end
 end
 
+M.clearAsm = function ()
+	if State.ns_id ~= nil then
+		api.nvim_buf_clear_namespace(0, State.ns_id, 0, -1);
+	end
+end
+
 M.setBin = setBin
+
+
 
 return M
