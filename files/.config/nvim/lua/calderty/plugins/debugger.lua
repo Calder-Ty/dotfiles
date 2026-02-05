@@ -58,7 +58,7 @@ dap.configurations.zig = {
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
 		args = function()
-			return splitStr(vim.ui.input('Args: '))
+			return splitStr(vim.fn.input('Args: '))
 		end,
 	}
 }

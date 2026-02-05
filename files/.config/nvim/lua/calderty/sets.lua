@@ -11,7 +11,8 @@ vim.opt.visualbell = true
 vim.opt.cursorline = true
 vim.opt.hlsearch = false
 vim.opt.scrolloff=10
-vim.opt.colorcolumn="100"
+vim.opt.colorcolumn="101"
+vim.opt.tw=100
 vim.opt.tabstop=4
 vim.opt.softtabstop=4
 vim.opt.shiftwidth=4
@@ -36,7 +37,7 @@ vim.opt.winborder = 'rounded'
 vim.opt.pumborder = 'rounded'
 vim.opt.foldenable = true
 vim.opt.foldlevel = 99
-vim.opt.complete = 'o,.,w,b'
+vim.opt.complete = 'o'
 vim.opt.efm = ""
 vim.opt.efm:append({
 	-- file/path.zig:18:36: error: use of undeclared identifier 'Allocator'

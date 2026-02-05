@@ -51,6 +51,7 @@ vim.lsp.enable('zls')
 vim.api.nvim_create_autocmd('LspAttach', {
 	group = vim.api.nvim_create_augroup('UserLspConfig', {}),
 	callback = function(ev)
+		vim.lsp.completion.enable(true, ev.data.client_id, ev.buf, {});
 		vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf, remap = false, desc = "Go to definition" })
