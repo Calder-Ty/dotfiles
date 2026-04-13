@@ -50,7 +50,7 @@ kanagawa.setup({
 	  }
 	end
 })
-vim.cmd("colorscheme kanagawa")
+vim.cmd("colorscheme minima")
 -- Plenary: Required by Telescope
 vim.pack.add({{src="https://github.com/nvim-lua/plenary.nvim"}})
 -- Telescope

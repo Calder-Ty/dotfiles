@@ -14,6 +14,8 @@ vim.keymap.set("n", "[q", ":cprev<CR>", {desc="Previous Quick Fix Item"})
 vim.keymap.set("n", "<leader>/", "gcc", {desc="Comment out current line", remap=true})
 vim.keymap.set("v", "<leader>/", "gc", {desc="Comment out selected lines", remap=true})
 
+vim.keymap.set("n", "<leader><leader>l", ":10sp .todo.tdt<CR>", {desc="Open local todos",})
+
 -- file navigation
 vim.keymap.set("n", "<leader>fj", function() buffers.gotoPinnedFile(0) end, {})
 vim.keymap.set("n", "<leader>fk", function() buffers.gotoPinnedFile(1) end, {})
