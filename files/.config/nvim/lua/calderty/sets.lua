@@ -1,3 +1,4 @@
+vim.o.stl = "%<%f %h%w%m%r%=%-14.(%l,%c%V%) %y"
 vim.o.number = true
 vim.o.rnu = true
 vim.o.background = "dark"
