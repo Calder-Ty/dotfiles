@@ -28,6 +28,10 @@ require("oil").setup({
 		"size",
 		"mtime",
 	},
+	keymaps = {
+		["<C-p>"] = false,
+		["<C-s>"] = false,
+	}
 })
 
 vim.cmd("colorscheme minima")
